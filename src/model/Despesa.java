@@ -2,21 +2,16 @@ package model;
 
 import java.util.Date;
 
-public class Despesas {
-	private final Conta conta;
+public class Despesa {
+
 	private final Date data;
 	private final String descricao;
 	private final double valor;
 
-	public Despesas(Conta conta, Date data, String descricao, double valor) {
-		this.conta = conta;
+	public Despesa(Date data, String descricao, double valor) {
 		this.data = data;
 		this.descricao = descricao;
 		this.valor = valor;
-	}
-
-	public Conta getConta() {
-		return conta;
 	}
 
 	public Date getData() {
