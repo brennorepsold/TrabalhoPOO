@@ -7,4 +7,11 @@ public interface IConta {
 
 	public void addDespesa(Date data, String descricao, double valor);
 
+	public double getTotalPagamentos();
+
+	public double getTotalDespesas();
+
+	public double getSaldoConta();
+
+	public StringBuilder getExtrato();
 }

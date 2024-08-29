@@ -26,4 +26,9 @@ public class Despesa {
 		return valor;
 	}
 
+	@Override
+	public String toString() {
+		return "Despesa [data=" + data + ", descricao=" + descricao + ", valor=" + valor + "]";
+	}
+
 }

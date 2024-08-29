@@ -23,4 +23,9 @@ public class Tribunal {
 		return secao;
 	}
 
+	@Override
+	public String toString() {
+		return "Identificação do Tribunal";
+	}
+
 }

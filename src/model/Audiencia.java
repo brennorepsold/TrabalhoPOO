@@ -9,7 +9,6 @@ public class Audiencia {
 	private final Advogado advogado;
 
 	public Audiencia(Date data, String recomendacao, Advogado advogado) {
-		super();
 		this.data = data;
 		this.recomendacao = recomendacao;
 		this.advogado = advogado;
@@ -25,6 +24,11 @@ public class Audiencia {
 
 	public Advogado getAdvogado() {
 		return advogado;
+	}
+
+	@Override
+	public String toString() {
+		return "Caracterisicas da Audiencia";
 	}
 
 }

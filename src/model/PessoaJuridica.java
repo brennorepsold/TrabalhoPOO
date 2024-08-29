@@ -10,6 +10,18 @@ public class PessoaJuridica extends Pessoa {
 		this.preposto = preposto;
 	}
 
+	public PessoaJuridica(String nome, String email, long cnpj, PessoaFisica preposto) {
+		super(nome, email);
+		this.cnpj = cnpj;
+		this.preposto = preposto;
+	}
+
+	public PessoaJuridica(String nome, long telefone, long cnpj, PessoaFisica preposto) {
+		super(nome, telefone);
+		this.cnpj = cnpj;
+		this.preposto = preposto;
+	}
+
 	public long getCnpj() {
 		return cnpj;
 	}
@@ -26,6 +38,11 @@ public class PessoaJuridica extends Pessoa {
 	public long getCadastroRF() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public String toString() {
+		return "Dados Pessoa Juridica";
 	}
 
 }

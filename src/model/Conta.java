@@ -19,4 +19,40 @@ public class Conta implements IConta {
 
 	}
 
+	@Override
+	public double getTotalPagamentos() {
+		double somatorio = 0;
+		for (Pagamento pagamento : pagamentos) {
+			somatorio += pagamento.getValor();
+		}
+		return somatorio;
+	}
+
+	@Override
+	public double getTotalDespesas() {
+		double somatorio = 0;
+		for (Despesa despesa : despesas) {
+			somatorio += despesa.getValor();
+		}
+		return somatorio;
+	}
+
+	@Override
+	public double getSaldoConta() {
+		return this.getTotalPagamentos() - this.getTotalDespesas();
+	}
+
+	@Override
+	public StringBuilder getExtrato() {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("Despesas: " + this.getTotalDespesas());
+		sb.append("\n");
+		sb.append("Total Pago: " + this.getTotalPagamentos());
+		sb.append("\n");
+		sb.append("Saldo conta: " + this.getSaldoConta());
+
+		return sb;
+	}
+
 }

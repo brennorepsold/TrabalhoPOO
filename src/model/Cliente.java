@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Cliente {
@@ -16,9 +15,33 @@ public class Cliente {
 		return pessoa;
 	}
 
-	public void addProcesso(long numero, Date dataAbertura, EFaseProcesso fase, Cliente cliente, Pessoa parteContraria,
-			Tribunal tribunal, IConta conta) {
-		processos.add(new Processo(numero, dataAbertura, fase, cliente, parteContraria, tribunal, conta));
+	public void addProcesso(Processo processo) {
+		processos.add(processo);
+	}
+
+	public void removeProcesso(Processo processo) {
+		processos.remove(processo);
+	}
+
+	public StringBuilder getExtratoContas() {
+		StringBuilder sb = new StringBuilder();
+		for (Processo processo : processos) {
+			sb.append(processo.getExtratoConta());
+		}
+		return sb;
+	}
+
+	public double getSaldoContas() {
+		double somatorio = 0;
+		for (Processo processo : processos) {
+			somatorio += processo.getConta().getSaldoConta();
+		}
+		return somatorio;
+	}
+
+	@Override
+	public String toString() {
+		return "Processos associados a um cliente";
 	}
 
 }

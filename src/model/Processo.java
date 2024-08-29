@@ -6,21 +6,21 @@ import java.util.List;
 
 public class Processo {
 	private final long numero;
+	// Perguntar se é data instanciada no new
 	private final Date dataAbertura;
-	private EFaseProcesso fase;
+	private EFaseProcesso fase = EFaseProcesso.INICIAL;
 
 	private final Cliente cliente;
 	private final Pessoa parteContraria;
-	private final Tribunal tribunal;
+	private Tribunal tribunal;
 	private final IConta conta;
 
 	private List<Audiencia> audiencias = new ArrayList<>();
 
-	public Processo(long numero, Date dataAbertura, EFaseProcesso fase, Cliente cliente, Pessoa parteContraria,
-			Tribunal tribunal, IConta conta) {
+	public Processo(long numero, Date dataAbertura, Cliente cliente, Pessoa parteContraria, Tribunal tribunal,
+			IConta conta) {
 		this.numero = numero;
 		this.dataAbertura = dataAbertura;
-		this.fase = fase;
 		this.cliente = cliente;
 		this.parteContraria = parteContraria;
 		this.tribunal = tribunal;
@@ -55,12 +55,39 @@ public class Processo {
 		return tribunal;
 	}
 
+	public void setTribunal(Tribunal tribunal) {
+		this.tribunal = tribunal;
+	}
+
 	public IConta getConta() {
 		return conta;
 	}
-	
+
 	public void addAudiencia(Date data, String recomendacao, Advogado advogado) {
 		audiencias.add(new Audiencia(data, recomendacao, advogado));
+	}
+
+	public double getTotalCustas() {
+		return this.conta.getTotalDespesas();
+	}
+
+	public StringBuilder getExtratoConta() {
+		return this.conta.getExtrato();
+	}
+
+	public StringBuilder getAudiencias() {
+		StringBuilder sb = new StringBuilder();
+		for (Audiencia audiencia : audiencias) {
+			sb.append(audiencia);
+		}
+		return sb;
+	}
+
+	@Override
+	public String toString() {
+		return "Processo [numero=" + numero + ", dataAbertura=" + dataAbertura + ", fase=" + fase + ", cliente="
+				+ cliente + ", parteContraria=" + parteContraria + ", tribunal=" + tribunal + ", conta=" + conta
+				+ ", audiencias=" + audiencias + "]";
 	}
 
 }

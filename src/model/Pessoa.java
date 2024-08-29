@@ -11,6 +11,16 @@ public abstract class Pessoa {
 		this.telefone = telefone;
 	}
 
+	public Pessoa(String nome, String email) {
+		this.nome = nome;
+		this.email = email;
+	}
+
+	public Pessoa(String nome, long telefone) {
+		this.nome = nome;
+		this.telefone = telefone;
+	}
+
 	public String getNome() {
 		return nome;
 	}
@@ -36,4 +46,10 @@ public abstract class Pessoa {
 	}
 
 	public abstract long getCadastroRF();
+
+	@Override
+	public String toString() {
+		return "Dados Pessoa Fisica";
+	}
+
 }
