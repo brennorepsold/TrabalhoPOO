@@ -14,7 +14,7 @@ public class Serializer {
 	private static String fileName = "data.bin";
 
 	public static MainController readFile() {
-
+		//Se Não conseguir ler o arquivo, vai instanciar todas as classes do zero
 		MainController mainController = null;
 
 		try {

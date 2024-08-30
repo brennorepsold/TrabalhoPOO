@@ -1,6 +1,11 @@
 package model;
 
-public class Tribunal {
+import java.io.Serializable;
+
+public class Tribunal implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	
 	private final String sigla;
 	private final String descricao;
 	private final String secao;

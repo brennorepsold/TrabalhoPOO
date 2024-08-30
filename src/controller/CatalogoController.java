@@ -28,7 +28,7 @@ public class CatalogoController implements Serializable {
 	public void addCategoria(String nome) {
 
 		categorias.put(nome, new Categoria(nome));	// insere novo objeto categoria no map categorias
-		MainController.save();
+		MainController.save(); //Ele salva na arvore cada metodo de controle 
 	}
 
 	public Set<String> getCategorias() {
