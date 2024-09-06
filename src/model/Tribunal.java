@@ -2,10 +2,10 @@ package model;
 
 import java.io.Serializable;
 
-public class Tribunal implements Serializable{
+public class Tribunal implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private final String sigla;
 	private final String descricao;
 	private final String secao;
@@ -30,7 +30,8 @@ public class Tribunal implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Identificação do Tribunal";
+		return "Identificação do Tribunal: " + "\n" + "Sigla: " + this.sigla + "\n" + "descricao: " + this.descricao
+				+ "\n" + "secao: " + this.secao;
 	}
 
 }

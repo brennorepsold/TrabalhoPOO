@@ -52,6 +52,14 @@ public class MenuView extends JFrame {
 			}
 		});
 
+		JButton btnTribunalView = new JButton("Tribunal");
+		btnTribunalView.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionTribunalView();
+			}
+		});
+		btnTribunalView.setBounds(6, 90, 228, 29);
+		contentPane.add(btnTribunalView);
 		contentPane.add(btnCategoriaView);
 		contentPane.add(btnItemView);
 	}
@@ -66,5 +74,11 @@ public class MenuView extends JFrame {
 
 		ItemView itemView = new ItemView();
 		itemView.setVisible(true);
+	}
+
+	private void actionTribunalView() {
+
+		TribunalView tribunalView = new TribunalView();
+		tribunalView.setVisible(true);
 	}
 }
