@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Conta implements IConta {
+
 	private List<Pagamento> pagamentos = new ArrayList<>();
 	private List<Despesa> despesas = new ArrayList<>();
 
@@ -39,13 +40,13 @@ public class Conta implements IConta {
 
 	@Override
 	public double getSaldoConta() {
-		return this.getTotalPagamentos() - this.getTotalDespesas();
+		return this.getTotalDespesas() - this.getTotalPagamentos();
 	}
 
 	@Override
 	public StringBuilder getExtrato() {
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("Despesas: " + this.getTotalDespesas());
 		sb.append("\n");
 		sb.append("Total Pago: " + this.getTotalPagamentos());

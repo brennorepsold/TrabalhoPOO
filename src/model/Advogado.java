@@ -1,6 +1,12 @@
 package model;
 
-public class Advogado extends PessoaFisica {
+import java.io.Serializable;
+
+public class Advogado extends PessoaFisica implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final long registro;
 
 	public Advogado(String nome, String email, long telefone, long cpf, long registro) {
@@ -24,7 +30,7 @@ public class Advogado extends PessoaFisica {
 
 	@Override
 	public String toString() {
-		return "Dados de contato advogado";
+		return "Nome: " + getNome() + ", Email: " + getEmail() + ", Telefone: " + getTelefone() + ", CPF: " + getCpf() + ", Registro: " + getRegistro() + "\n";
 	}
 	
 	

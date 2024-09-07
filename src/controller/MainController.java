@@ -7,7 +7,6 @@ import persistence.Serializer;
 /* 
  * Design Pattern Singleton 
  * 
- * Criar Controladores para as classes:(Processo, tribunal, conta, pessoas, audiencia)
  */
 
 public class MainController implements Serializable {
@@ -16,16 +15,16 @@ public class MainController implements Serializable {
 
 	private static MainController instance;
 
-	private CatalogoController catalogoController;
-
 	private TribunalController tribunalController;
+	
+	private PessoaController pessoaController;
+	
 
 	// declarar os demais controladores
 
 	private MainController() {
-
-		catalogoController = new CatalogoController();
 		tribunalController = new TribunalController();
+		pessoaController = new PessoaController();
 
 		// instanciar os demais controladores
 		//
@@ -35,14 +34,14 @@ public class MainController implements Serializable {
 		return instance;
 	}
 
-	public static CatalogoController getCatalogoController() {
-		return instance.catalogoController;
-	}
-
 	// implementar metodos acessadores estaticos para os demais controladores
 
 	public static TribunalController getTribunalController() {
 		return instance.tribunalController;
+	}
+	
+	public static PessoaController getPessoaController() {
+		return instance.pessoaController;
 	}
 
 	public static void load() {

@@ -26,5 +26,4 @@ public class TribunalController implements Serializable {
 	public Set<String> getTribunais(){
 		return tribunais.keySet();
 	}
-
 }

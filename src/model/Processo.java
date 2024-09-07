@@ -6,7 +6,6 @@ import java.util.List;
 
 public class Processo {
 	private final long numero;
-	// Perguntar se é data instanciada no new
 	private final Date dataAbertura;
 	private EFaseProcesso fase = EFaseProcesso.INICIAL;
 

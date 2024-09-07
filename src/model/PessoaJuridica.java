@@ -1,6 +1,12 @@
 package model;
 
-public class PessoaJuridica extends Pessoa {
+import java.io.Serializable;
+
+public class PessoaJuridica extends Pessoa implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final long cnpj;
 	private PessoaFisica preposto;
 
@@ -36,13 +42,12 @@ public class PessoaJuridica extends Pessoa {
 
 	@Override
 	public long getCadastroRF() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getCnpj();
 	}
 
 	@Override
 	public String toString() {
-		return "Dados Pessoa Juridica";
+		return "Nome: " + getNome() + ", Email: " + getEmail() + ", Telefone: " + getTelefone() + ", CNPJ: " + getCnpj() + ", Nome Preposto: " + getPreposto().getNome() + "\n";
 	}
 
 }

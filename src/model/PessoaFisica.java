@@ -1,6 +1,12 @@
 package model;
 
-public class PessoaFisica extends Pessoa {
+import java.io.Serializable;
+
+public class PessoaFisica extends Pessoa implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final long cpf;
 
 	public PessoaFisica(String nome, String email, long telefone, long cpf) {
@@ -24,7 +30,14 @@ public class PessoaFisica extends Pessoa {
 
 	@Override
 	public long getCadastroRF() {
-		return 0;
+		return getCpf();
 	}
+
+	@Override
+	public String toString() {
+		return "Nome: " + getNome() + ", Email: " + getEmail() + ", Telefone: " + getTelefone() + ", CPF: " + getCpf() + "\n";
+	}
+	
+	
 
 }

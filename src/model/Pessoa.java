@@ -1,6 +1,12 @@
 package model;
 
-public abstract class Pessoa {
+import java.io.Serializable;
+
+public abstract class Pessoa implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String nome;
 	private String email;
 	private long telefone;
@@ -49,7 +55,7 @@ public abstract class Pessoa {
 
 	@Override
 	public String toString() {
-		return "Dados Pessoa Fisica";
+		return "Nome: " + getNome() + ", Email: " + getEmail() + ", Telefone: " + getEmail() + "\n";
 	}
 
 }

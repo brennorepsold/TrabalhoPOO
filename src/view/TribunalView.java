@@ -1,5 +1,8 @@
 package view;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -7,125 +10,157 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 
 import controller.MainController;
 import controller.TribunalController;
 
 public class TribunalView extends JFrame {
-	private static final long serialVersionUID = -5659880888694503154L;
+    private static final long serialVersionUID = -5659880888694503154L;
 
-	private JPanel contentPane;
+    private JPanel contentPane;
 
-	private JLabel lblSigla;
+    private JLabel lblSigla;
+    private JLabel lblDescricao;
+    private JLabel lblSecao;
 
-	private JTextField txtSigla;
-	private JTextArea textArea;
+    private JTextField txtSigla;
+    private JTextField txtDescricao;
+    private JTextField txtSecao;
+    private JTextArea textArea;
 
-	private JButton btnSalvar;
-	private JButton btnListar;
-	private JTextField txtDescricao;
-	private JTextField txtSecao;
+    private JButton btnSalvar;
+    private JButton btnListar;
 
-	public TribunalView() {
-		initialize();
-	}
+    public TribunalView() {
+        initialize();
+    }
 
-	private void initialize() {
+    private void initialize() {
+        setTitle("Tribunal");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setBounds(100, 100, 600, 400); // Ajuste o tamanho da janela conforme necessário
 
-		setTitle("Tribunal");
+        contentPane = new JPanel();
+        contentPane.setLayout(new GridBagLayout());
+        setContentPane(contentPane);
 
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 495, 281);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(null);
+        // Configuração para labels e campos de texto
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.weightx = 0.3;
+        gbc.weighty = 0.0;
 
-		setContentPane(contentPane);
+        lblSigla = new JLabel("Sigla");
+        contentPane.add(lblSigla, gbc);
 
-		lblSigla = new JLabel("Sigla");
-		lblSigla.setBounds(6, 21, 61, 16);
+        gbc.gridy = 1;
+        lblDescricao = new JLabel("Descrição");
+        contentPane.add(lblDescricao, gbc);
 
-		txtSigla = new JTextField();
-		txtSigla.setBounds(62, 16, 282, 26);
-		txtSigla.setColumns(20);
+        gbc.gridy = 2;
+        lblSecao = new JLabel("Seção");
+        contentPane.add(lblSecao, gbc);
 
-		btnSalvar = new JButton("Salvar");
-		btnSalvar.setBounds(360, 16, 117, 29);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 0.7;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		btnSalvar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				actionSalvar();
-			}
-		});
+        txtSigla = new JTextField();
+        contentPane.add(txtSigla, gbc);
 
-		textArea = new JTextArea();
-		textArea.setBounds(6, 160, 344, 70);
+        gbc.gridy = 1;
+        txtDescricao = new JTextField();
+        contentPane.add(txtDescricao, gbc);
 
-		btnListar = new JButton("Listar");
-		btnListar.setBounds(360, 57, 117, 29);
+        gbc.gridy = 2;
+        txtSecao = new JTextField();
+        contentPane.add(txtSecao, gbc);
 
-		btnListar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				actionListar();
-			}
-		});
+        // Configuração para painel de botões
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridheight = 3;
+        gbc.weightx = 0.0;
+        gbc.weighty = 0.0;
+        gbc.fill = GridBagConstraints.BOTH;
 
-		contentPane.add(lblSigla);
-		contentPane.add(txtSigla);
-		contentPane.add(btnSalvar);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridBagLayout());
 
-		contentPane.add(textArea);
-		contentPane.add(btnListar);
-		
-		txtDescricao = new JTextField();
-		txtDescricao.setColumns(20);
-		txtDescricao.setBounds(62, 58, 282, 35);
-		contentPane.add(txtDescricao);
-		
-		txtSecao = new JTextField();
-		txtSecao.setColumns(20);
-		txtSecao.setBounds(62, 110, 282, 26);
-		contentPane.add(txtSecao);
-		
-		JLabel lblDescricao = new JLabel("Descrição");
-		lblDescricao.setBounds(6, 67, 61, 16);
-		contentPane.add(lblDescricao);
-		
-		JLabel lblSecao = new JLabel("Secao");
-		lblSecao.setBounds(6, 115, 61, 16);
-		contentPane.add(lblSecao);
+        GridBagConstraints buttonGbc = new GridBagConstraints();
+        buttonGbc.insets = new Insets(5, 5, 5, 5);
+        buttonGbc.gridx = 0;
+        buttonGbc.gridy = 0;
+        buttonGbc.fill = GridBagConstraints.HORIZONTAL;
 
-		actionListar();
-	}
+        btnSalvar = new JButton("Salvar");
+        buttonPanel.add(btnSalvar, buttonGbc);
+        btnSalvar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                actionSalvar();
+            }
+        });
 
-	private void actionSalvar() {
+        buttonGbc.gridy = 1;
+        btnListar = new JButton("Listar");
+        buttonPanel.add(btnListar, buttonGbc);
+        btnListar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                actionListar();
+            }
+        });
 
-		TribunalController controller = MainController.getTribunalController();
+        contentPane.add(buttonPanel, gbc);
 
-		String nome = txtSigla.getText();
+        // Configuração para textArea
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 3;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
 
-		controller.addTribunal(nome, nome, nome);
+        textArea = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        contentPane.add(scrollPane, gbc);
 
-		limparForm();
+        actionListar();
+    }
 
-		actionListar();
-	}
+    private void actionSalvar() {
+        TribunalController controller = MainController.getTribunalController();
 
-	private void actionListar() {
+        String sigla = txtSigla.getText();
+        String descricao = txtDescricao.getText();
+        String secao = txtSecao.getText();
 
-		TribunalController controller = MainController.getTribunalController();
+        controller.addTribunal(sigla, descricao, secao);
 
-		textArea.setText(null);
-		for (String nomeCategoria : controller.getTribunais()) {
-			textArea.append(String.format("%s\n", nomeCategoria));
-		}
-	}
+        limparForm();
 
-	private void limparForm() {
-		txtSigla.setText("");
-	}
+        actionListar();
+    }
+
+    private void actionListar() {
+        TribunalController controller = MainController.getTribunalController();
+
+        textArea.setText(null);
+        for (String siglaTribunal : controller.getTribunais()) {
+            textArea.append(String.format("%s\n", siglaTribunal));
+        }
+    }
+
+    private void limparForm() {
+        txtSigla.setText("");
+        txtDescricao.setText("");
+        txtSecao.setText("");
+    }
 }

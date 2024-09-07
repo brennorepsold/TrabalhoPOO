@@ -8,14 +8,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controller.PessoaController;
+
 public class MenuView extends JFrame {
 
 	private static final long serialVersionUID = -2113576277373274435L;
 
 	private JPanel contentPane;
-
-	private JButton btnCategoriaView;
-	private JButton btnItemView;
 
 	public MenuView() {
 		initialize();
@@ -23,7 +22,7 @@ public class MenuView extends JFrame {
 
 	private void initialize() {
 
-		setTitle("App Catalogo");
+		setTitle("App Escritorio");
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -34,51 +33,35 @@ public class MenuView extends JFrame {
 
 		this.setContentPane(contentPane);
 
-		btnCategoriaView = new JButton("Categorias");
-		btnCategoriaView.setBounds(6, 18, 228, 29);
-
-		btnCategoriaView.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				actionCategoriaView();
-			}
-		});
-
-		btnItemView = new JButton("Itens");
-		btnItemView.setBounds(6, 52, 228, 29);
-
-		btnItemView.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				actionItemView();
-			}
-		});
-
-		JButton btnTribunalView = new JButton("Tribunal");
-		btnTribunalView.addActionListener(new ActionListener() {
+		JButton btnCadastroTribunalView = new JButton("Cadastro Tribunal");
+		btnCadastroTribunalView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionTribunalView();
 			}
 		});
-		btnTribunalView.setBounds(6, 90, 228, 29);
-		contentPane.add(btnTribunalView);
-		contentPane.add(btnCategoriaView);
-		contentPane.add(btnItemView);
-	}
-
-	private void actionCategoriaView() {
-
-		CategoriaView categoriaView = new CategoriaView();
-		categoriaView.setVisible(true);
-	}
-
-	private void actionItemView() {
-
-		ItemView itemView = new ItemView();
-		itemView.setVisible(true);
+		btnCadastroTribunalView.setBounds(10, 11, 228, 29);
+		contentPane.add(btnCadastroTribunalView);
+		
+		JButton btnCadastroCliente = new JButton("Cadastro Pessoas");
+		btnCadastroCliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionClienteView();
+			}
+		});
+		btnCadastroCliente.setBounds(10, 51, 228, 29);
+		contentPane.add(btnCadastroCliente);
 	}
 
 	private void actionTribunalView() {
 
 		TribunalView tribunalView = new TribunalView();
 		tribunalView.setVisible(true);
+	}
+	
+	private void actionClienteView() {
+
+		PessoaController pessoaController = new PessoaController();
+		PessoaView pessoaView = new PessoaView(pessoaController);
+		pessoaView.setVisible(true);
 	}
 }
