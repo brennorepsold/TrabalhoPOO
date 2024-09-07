@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controller.ClienteController;
 import controller.PessoaController;
 
 public class MenuView extends JFrame {
@@ -42,14 +43,23 @@ public class MenuView extends JFrame {
 		btnCadastroTribunalView.setBounds(10, 11, 228, 29);
 		contentPane.add(btnCadastroTribunalView);
 		
-		JButton btnCadastroCliente = new JButton("Cadastro Pessoas");
-		btnCadastroCliente.addActionListener(new ActionListener() {
+		JButton btnCadastroPessoas = new JButton("Cadastro Pessoas");
+		btnCadastroPessoas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionPessoaView();
+			}
+		});
+		btnCadastroPessoas.setBounds(10, 51, 228, 29);
+		contentPane.add(btnCadastroPessoas);
+		
+		JButton btnCadastroClientes = new JButton("Cadastro Clientes");
+		btnCadastroClientes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionClienteView();
 			}
 		});
-		btnCadastroCliente.setBounds(10, 51, 228, 29);
-		contentPane.add(btnCadastroCliente);
+		btnCadastroClientes.setBounds(10, 91, 228, 29);
+		contentPane.add(btnCadastroClientes);
 	}
 
 	private void actionTribunalView() {
@@ -58,10 +68,18 @@ public class MenuView extends JFrame {
 		tribunalView.setVisible(true);
 	}
 	
-	private void actionClienteView() {
+	private void actionPessoaView() {
 
 		PessoaController pessoaController = new PessoaController();
 		PessoaView pessoaView = new PessoaView(pessoaController);
 		pessoaView.setVisible(true);
+	}
+	
+	private void actionClienteView() {
+		PessoaController pessoaController = new PessoaController();
+        ClienteController clienteController = new ClienteController();
+
+		ClienteView clienteView = new ClienteView(clienteController, pessoaController);
+		clienteView.setVisible(true);
 	}
 }

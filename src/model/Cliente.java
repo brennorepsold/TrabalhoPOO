@@ -15,6 +15,10 @@ public class Cliente {
 		return pessoa;
 	}
 
+	public List<Processo> getProcessos() {
+		return processos;
+	}
+
 	public void addProcesso(Processo processo) {
 		processos.add(processo);
 	}
