@@ -7,7 +7,7 @@ import java.util.List;
 public class Processo {
 	private final long numero;
 	private final Date dataAbertura;
-	private EFaseProcesso fase = EFaseProcesso.INICIAL;
+	private EFaseProcesso fase;
 
 	private final Cliente cliente;
 	private final Pessoa parteContraria;
@@ -16,14 +16,16 @@ public class Processo {
 
 	private List<Audiencia> audiencias = new ArrayList<>();
 
-	public Processo(long numero, Date dataAbertura, Cliente cliente, Pessoa parteContraria, Tribunal tribunal,
-			IConta conta) {
+	public Processo(long numero, Date dataAbertura, Cliente cliente, Pessoa parteContraria, Tribunal tribunal) {
 		this.numero = numero;
 		this.dataAbertura = dataAbertura;
 		this.cliente = cliente;
 		this.parteContraria = parteContraria;
 		this.tribunal = tribunal;
-		this.conta = conta;
+
+		this.fase = EFaseProcesso.INICIAL;
+		this.conta = new Conta();
+
 	}
 
 	public EFaseProcesso getFase() {
