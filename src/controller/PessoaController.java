@@ -12,9 +12,7 @@ import model.PessoaFisica;
 import model.PessoaJuridica;
 
 public class PessoaController implements Serializable{
-    /**
-	 * 
-	 */
+    
 	private static final long serialVersionUID = 1L;
 	private Map<Long, Pessoa> pessoasFisicas;
     private Map<Long, Pessoa> pessoasJuridicas;
