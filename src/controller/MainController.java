@@ -16,18 +16,14 @@ public class MainController implements Serializable {
 	private static MainController instance;
 
 	private TribunalController tribunalController;
-	
+
 	private PessoaController pessoaController;
-	
-	private ClienteController clienteController;
-	
 
 	// declarar os demais controladores
 
 	private MainController() {
 		tribunalController = new TribunalController();
 		pessoaController = new PessoaController();
-		clienteController = new ClienteController();
 
 		// instanciar os demais controladores
 		//
@@ -42,13 +38,9 @@ public class MainController implements Serializable {
 	public static TribunalController getTribunalController() {
 		return instance.tribunalController;
 	}
-	
+
 	public static PessoaController getPessoaController() {
 		return instance.pessoaController;
-	}
-	
-	public static ClienteController getClienteController() {
-		return instance.clienteController;
 	}
 
 	public static void load() {

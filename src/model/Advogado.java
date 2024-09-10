@@ -9,17 +9,17 @@ public class Advogado extends PessoaFisica implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final long registro;
 
-	public Advogado(String nome, String email, long telefone, long cpf, long registro) {
+	public Advogado(String nome, String email, long telefone, String cpf, long registro) {
 		super(nome, email, telefone, cpf);
 		this.registro = registro;
 	}
 	
-	public Advogado(String nome, long telefone, long cpf, long registro) {
+	public Advogado(String nome, long telefone, String cpf, long registro) {
 		super(nome, telefone, cpf);
 		this.registro = registro;
 	}
 	
-	public Advogado(String nome, String email, long cpf, long registro) {
+	public Advogado(String nome, String email, String cpf, long registro) {
 		super(nome, email, cpf);
 		this.registro = registro;
 	}

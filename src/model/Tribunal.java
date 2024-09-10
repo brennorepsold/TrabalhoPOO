@@ -30,8 +30,7 @@ public class Tribunal implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Identificação do Tribunal: " + "\n" + "Sigla: " + this.sigla + "\n" + "descricao: " + this.descricao
-				+ "\n" + "secao: " + this.secao;
+		 return sigla + " - " + descricao;
 	}
 
 }

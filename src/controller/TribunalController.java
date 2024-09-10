@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -23,7 +25,17 @@ public class TribunalController implements Serializable {
 		MainController.save();
 	}
 	
-	public Set<String> getTribunais(){
+	public Set<String> getSiglasTribunais(){
 		return tribunais.keySet();
+	}
+	
+	public List<Tribunal> getTribunais() {
+
+		List<Tribunal> lista = new ArrayList<>();
+
+		for (Tribunal t : tribunais.values())
+			lista.add(new Tribunal(t.getSigla(), t.getDescricao(), t.getSecao()));
+
+		return lista;
 	}
 }
