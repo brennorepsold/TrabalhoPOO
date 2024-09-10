@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import exception.TribunalException;
 import model.Tribunal;
 
 public class TribunalController implements Serializable {
@@ -20,7 +21,9 @@ public class TribunalController implements Serializable {
 		tribunais = new TreeMap<>();
 	}
 	
-	public void addTribunal(String sigla, String descricao, String secao) {
+	public void addTribunal(String sigla, String descricao, String secao) throws TribunalException {
+		if (getTribunalBySigla(sigla) != null)
+			throw new TribunalException("Sigla já existente!");
 		tribunais.put(sigla,new Tribunal(sigla, descricao, secao));
 		MainController.save();
 	}
@@ -29,7 +32,11 @@ public class TribunalController implements Serializable {
 		return tribunais.keySet();
 	}
 	
-	public List<Tribunal> getTribunais() {
+	public Tribunal getTribunalBySigla(String sigla) {
+		return tribunais.get(sigla);
+	}
+	
+	public List<Tribunal> getTribunais() throws TribunalException {
 
 		List<Tribunal> lista = new ArrayList<>();
 

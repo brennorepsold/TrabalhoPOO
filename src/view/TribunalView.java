@@ -15,7 +15,7 @@ import javax.swing.border.EmptyBorder;
 
 import controller.MainController;
 import controller.TribunalController;
-
+import exception.TribunalException;
 import model.Tribunal;
 
 public class TribunalView extends JFrame {
@@ -78,7 +78,12 @@ public class TribunalView extends JFrame {
 		JButton btnSalvar = new JButton("Salvar");
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				actionSalvar();
+				try {
+					actionSalvar();
+				} catch (TribunalException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnSalvar.setBounds(327, 47, 117, 29);
@@ -91,14 +96,19 @@ public class TribunalView extends JFrame {
 		btnListar = new JButton("Listar");
 		btnListar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				actionListar();
+				try {
+					actionListar();
+				} catch (TribunalException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnListar.setBounds(327, 80, 117, 29);
 		contentPane.add(btnListar);
 	}
 
-	private void actionSalvar() {
+	private void actionSalvar() throws TribunalException {
 
 		String sigla;
 		String descricao;
@@ -114,7 +124,7 @@ public class TribunalView extends JFrame {
 		limparForm();
 	}
 
-	private void actionListar() {
+	private void actionListar() throws TribunalException {
 
 		List<Tribunal> lista = controller.getTribunais();
 
