@@ -1,15 +1,20 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Pagamento {
+public class Pagamento implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final EFormaPagamento forma;
 	private final Date data;
 	private final double valor;
 
-	public Pagamento(EFormaPagamento forma, Date data, double valor) {
+	public Pagamento(EFormaPagamento forma, double valor) {
 		this.forma = forma;
-		this.data = data;
+		this.data = new Date();
 		this.valor = valor;
 	}
 

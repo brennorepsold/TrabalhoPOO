@@ -1,10 +1,15 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Processo {
+public class Processo implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final long numero;
 	private final Date dataAbertura;
 	private EFaseProcesso fase;
@@ -16,9 +21,10 @@ public class Processo {
 
 	private List<Audiencia> audiencias = new ArrayList<>();
 
-	public Processo(long numero, Date dataAbertura, Cliente cliente, Pessoa parteContraria, Tribunal tribunal) {
+	public Processo(long numero, Cliente cliente, Pessoa parteContraria, Tribunal tribunal) {
 		this.numero = numero;
-		this.dataAbertura = dataAbertura;
+		//Depois trocar para entrada de data
+		this.dataAbertura = new Date();
 		this.cliente = cliente;
 		this.parteContraria = parteContraria;
 		this.tribunal = tribunal;
@@ -64,8 +70,8 @@ public class Processo {
 		return conta;
 	}
 
-	public void addAudiencia(Date data, String recomendacao, Advogado advogado) {
-		audiencias.add(new Audiencia(data, recomendacao, advogado));
+	public void addAudiencia(String recomendacao, Advogado advogado) {
+		audiencias.add(new Audiencia(recomendacao, advogado));
 	}
 
 	public double getTotalCustas() {

@@ -1,15 +1,20 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Despesa {
+public class Despesa implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final Date data;
 	private final String descricao;
 	private final double valor;
 
-	public Despesa(Date data, String descricao, double valor) {
-		this.data = data;
+	public Despesa(String descricao, double valor) {
+		this.data = new Date();
 		this.descricao = descricao;
 		this.valor = valor;
 	}

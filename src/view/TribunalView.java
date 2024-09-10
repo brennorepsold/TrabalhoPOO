@@ -41,25 +41,23 @@ public class TribunalView extends JFrame {
     private void initialize() {
 
         setTitle("Tribunal");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 450, 300);
 
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(new GridBagLayout()); // Configuração do GridBagLayout
+        contentPane.setLayout(new GridBagLayout());
         setContentPane(contentPane);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // Espaçamento entre componentes
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Label Sigla
         JLabel lblSigla = new JLabel("Sigla");
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         contentPane.add(lblSigla, gbc);
 
-        // Campo Sigla
         txtSigla = new JTextField();
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -67,7 +65,6 @@ public class TribunalView extends JFrame {
         gbc.weightx = 0.5;
         contentPane.add(txtSigla, gbc);
 
-        // Label Nome
         JLabel lblNome = new JLabel("Nome");
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -75,7 +72,6 @@ public class TribunalView extends JFrame {
         gbc.fill = GridBagConstraints.NONE;
         contentPane.add(lblNome, gbc);
 
-        // Campo Nome
         txtDescricao = new JTextField();
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -83,7 +79,6 @@ public class TribunalView extends JFrame {
         gbc.weightx = 1;
         contentPane.add(txtDescricao, gbc);
 
-        // Label Secao
         JLabel lblSecao = new JLabel("Secao");
         gbc.gridx = 2;
         gbc.gridy = 0;
@@ -91,7 +86,6 @@ public class TribunalView extends JFrame {
         gbc.fill = GridBagConstraints.NONE;
         contentPane.add(lblSecao, gbc);
 
-        // Campo Secao
         txtSecao = new JTextField();
         gbc.gridx = 2;
         gbc.gridy = 1;
@@ -99,7 +93,6 @@ public class TribunalView extends JFrame {
         gbc.weightx = 0.5;
         contentPane.add(txtSecao, gbc);
 
-        // Botão Salvar
         JButton btnSalvar = new JButton("Salvar");
         gbc.gridx = 3;
         gbc.gridy = 1;
@@ -116,21 +109,19 @@ public class TribunalView extends JFrame {
         });
         contentPane.add(btnSalvar, gbc);
 
-        // Área de Texto
         textArea = new JTextArea();
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.gridwidth = 3; // Usa três colunas
+        gbc.gridwidth = 3;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1;
         gbc.weighty = 1;
         contentPane.add(textArea, gbc);
 
-        // Botão Listar
         btnListar = new JButton("Listar");
         gbc.gridx = 3;
         gbc.gridy = 2;
-        gbc.gridwidth = 1; // Apenas uma coluna
+        gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0;
         gbc.weighty = 0;

@@ -1,15 +1,20 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Audiencia {
+public class Audiencia implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final Date data;
 	private final String recomendacao;
 
 	private final Advogado advogado;
 
-	public Audiencia(Date data, String recomendacao, Advogado advogado) {
-		this.data = data;
+	public Audiencia(String recomendacao, Advogado advogado) {
+		this.data = new Date();// trocar depois pela entrada
 		this.recomendacao = recomendacao;
 		this.advogado = advogado;
 	}

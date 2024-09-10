@@ -19,21 +19,20 @@ public class MainController implements Serializable {
 
 	private PessoaController pessoaController;
 
+	private ProcessoController processoController;
+
 	// declarar os demais controladores
 
 	private MainController() {
 		tribunalController = new TribunalController();
 		pessoaController = new PessoaController();
+		processoController = new ProcessoController();
 
-		// instanciar os demais controladores
-		//
 	}
 
 	public static MainController getInstance() {
 		return instance;
 	}
-
-	// implementar metodos acessadores estaticos para os demais controladores
 
 	public static TribunalController getTribunalController() {
 		return instance.tribunalController;
@@ -41,6 +40,10 @@ public class MainController implements Serializable {
 
 	public static PessoaController getPessoaController() {
 		return instance.pessoaController;
+	}
+
+	public static ProcessoController getProcessoController() {
+		return instance.processoController;
 	}
 
 	public static void load() {

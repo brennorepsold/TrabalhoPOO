@@ -1,13 +1,19 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -16,19 +22,23 @@ import javax.swing.JTextField;
 
 import controller.MainController;
 import controller.PessoaController;
+import controller.ProcessoController;
 import controller.TribunalController;
-import java.awt.event.ActionListener;
-import java.util.Vector;
-import java.awt.event.ActionEvent;
+import model.EFormaPagamento;
+import model.Pessoa;
+import model.Processo;
 
 public class ProcessoView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
+	private ProcessoController processoController = MainController.getProcessoController();
+	private TribunalController tribunalController = MainController.getTribunalController();
+	private PessoaController pessoaController = MainController.getPessoaController();
+
 	private JPanel contentPane;
 	private JTabbedPane mainTabbedPane;
 
-	// Componentes de Processo
 	private JTextField txtNumeroProcesso;
 	private JTextField txtDataAbertura;
 	private JComboBox<String> comboClientes;
@@ -39,16 +49,13 @@ public class ProcessoView extends JFrame {
 	private JButton btnListarProcessos;
 	private JTextArea textAreaProcessos;
 
-	// Componentes de Audiências
 	private JTextField txtDataAudiencia;
 	private JTextField txtRecomendacaoAudiencia;
 	private JComboBox<String> comboAdvogadoAudiencia;
 	private JButton btnSalvarAudiencia;
-	private JComboBox<String> comboProcessoListarAudiencias;
 	private JButton btnListarAudiencias;
 	private JTextArea textAreaAudiencias;
 
-	// Componentes de Custas
 	private JComboBox<String> comboFormaPagamento;
 	private JTextField txtDataPagamento;
 	private JTextField txtValorPagamento;
@@ -59,6 +66,12 @@ public class ProcessoView extends JFrame {
 	private JButton btnSalvarDespesa;
 	private JButton btnListarExtrato;
 	private JTextArea textAreaExtratoConta;
+
+	private JComboBox<Long> comboProcessos;
+	private JComboBox<Long> comboProcessosListar;
+	private JComboBox<Long> comboProcessosPagamento;
+	private JComboBox<Long> comboProcessosDespesa;
+	private JComboBox<Long> comboProcessosExtrato;
 
 	public ProcessoView() {
 		initialize();
@@ -76,7 +89,6 @@ public class ProcessoView extends JFrame {
 		mainTabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(mainTabbedPane, BorderLayout.CENTER);
 
-		// Abas principais
 		JPanel panelProcesso = new JPanel(new BorderLayout());
 		JPanel panelAudiencias = new JPanel(new BorderLayout());
 		JPanel panelCustas = new JPanel(new BorderLayout());
@@ -91,13 +103,10 @@ public class ProcessoView extends JFrame {
 	}
 
 	private void initProcessoPane(JPanel panelProcesso) {
-		TribunalController tribunalController = MainController.getTribunalController();
-		PessoaController pessoaController = MainController.getPessoaController();
 
 		JTabbedPane processoTabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		panelProcesso.add(processoTabbedPane, BorderLayout.CENTER);
 
-		// Cadastrar Processo
 		JPanel panelCadastrarProcesso = new JPanel(new GridLayout(7, 2, 5, 5));
 		processoTabbedPane.addTab("Cadastrar Processo", panelCadastrarProcesso);
 
@@ -113,7 +122,6 @@ public class ProcessoView extends JFrame {
 
 		JLabel lblCliente = new JLabel("Cliente:");
 		comboClientes = new JComboBox<>(new Vector<>(pessoaController.getNomesPessoas()));
-
 		panelCadastrarProcesso.add(lblCliente);
 		panelCadastrarProcesso.add(comboClientes);
 
@@ -133,18 +141,29 @@ public class ProcessoView extends JFrame {
 				actionSalvarProcesso();
 			}
 		});
-		panelCadastrarProcesso.add(new JLabel()); // Placeholder
+		panelCadastrarProcesso.add(new JLabel());
 		panelCadastrarProcesso.add(btnSalvarProcesso);
 
-		// Listar Processos
 		JPanel panelListarProcessos = new JPanel(new BorderLayout());
 		processoTabbedPane.addTab("Listar Processos", panelListarProcessos);
 
 		JPanel panelTopListar = new JPanel(new FlowLayout());
-		comboClientesListar = new JComboBox<>();
-		btnListarProcessos = new JButton("Listar Processos");
+
+		JLabel lblClientes = new JLabel("Cliente:");
+		panelTopListar.add(lblClientes);
+
+		comboClientesListar = new JComboBox<>(new Vector<>(processoController.getClientes()));
+		comboClientesListar.setPreferredSize(new Dimension(200, 25));
 		panelTopListar.add(comboClientesListar);
+
+		btnListarProcessos = new JButton("Listar Processos");
+		btnListarProcessos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionListarProcessos();
+			}
+		});
 		panelTopListar.add(btnListarProcessos);
+
 		panelListarProcessos.add(panelTopListar, BorderLayout.NORTH);
 
 		textAreaProcessos = new JTextArea();
@@ -156,9 +175,13 @@ public class ProcessoView extends JFrame {
 		JTabbedPane audienciasTabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		panelAudiencias.add(audienciasTabbedPane, BorderLayout.CENTER);
 
-		// Cadastrar Audiência
-		JPanel panelCadastrarAudiencia = new JPanel(new GridLayout(5, 2, 5, 5));
+		JPanel panelCadastrarAudiencia = new JPanel(new GridLayout(6, 2, 5, 5));
 		audienciasTabbedPane.addTab("Cadastrar Audiência", panelCadastrarAudiencia);
+
+		JLabel lblProcesso = new JLabel("Processo:");
+		comboProcessos = new JComboBox<>(new Vector<>(processoController.getProcessos()));
+		panelCadastrarAudiencia.add(lblProcesso);
+		panelCadastrarAudiencia.add(comboProcessos);
 
 		JLabel lblDataAudiencia = new JLabel("Data da Audiência:");
 		txtDataAudiencia = new JTextField();
@@ -171,23 +194,38 @@ public class ProcessoView extends JFrame {
 		panelCadastrarAudiencia.add(txtRecomendacaoAudiencia);
 
 		JLabel lblAdvogado = new JLabel("Advogado:");
-		comboAdvogadoAudiencia = new JComboBox<>();
+		comboAdvogadoAudiencia = new JComboBox<>(new Vector<>(pessoaController.getNomesAdvogados()));
 		panelCadastrarAudiencia.add(lblAdvogado);
 		panelCadastrarAudiencia.add(comboAdvogadoAudiencia);
 
 		btnSalvarAudiencia = new JButton("Salvar Audiência");
-		panelCadastrarAudiencia.add(new JLabel()); // Placeholder
+		btnSalvarAudiencia.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionSalvarAudiencia();
+			}
+		});
+		panelCadastrarAudiencia.add(new JLabel());
 		panelCadastrarAudiencia.add(btnSalvarAudiencia);
 
-		// Listar Audiências
 		JPanel panelListarAudiencias = new JPanel(new BorderLayout());
 		audienciasTabbedPane.addTab("Listar Audiências", panelListarAudiencias);
 
-		JPanel panelTopListarAudiencias = new JPanel(new FlowLayout());
-		comboProcessoListarAudiencias = new JComboBox<>();
+		JPanel panelTopListarAudiencias = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+		JLabel lblProcessosListar = new JLabel("Processos:");
+		comboProcessosListar = new JComboBox<>(new Vector<>(processoController.getProcessos()));
+		comboProcessosListar.setPreferredSize(new Dimension(200, 25));
+		panelTopListarAudiencias.add(lblProcessosListar);
+		panelTopListarAudiencias.add(comboProcessosListar);
+
 		btnListarAudiencias = new JButton("Listar Audiências");
-		panelTopListarAudiencias.add(comboProcessoListarAudiencias);
+		btnListarAudiencias.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionListarAudiencias();
+			}
+		});
 		panelTopListarAudiencias.add(btnListarAudiencias);
+
 		panelListarAudiencias.add(panelTopListarAudiencias, BorderLayout.NORTH);
 
 		textAreaAudiencias = new JTextArea();
@@ -199,12 +237,19 @@ public class ProcessoView extends JFrame {
 		JTabbedPane custasTabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		panelCustas.add(custasTabbedPane, BorderLayout.CENTER);
 
-		// Adicionar Pagamento
-		JPanel panelPagamento = new JPanel(new GridLayout(5, 2, 5, 5));
+		JPanel panelPagamento = new JPanel(new GridLayout(6, 2, 5, 5));
+
 		custasTabbedPane.addTab("Adicionar Pagamento", panelPagamento);
 
+		JLabel lblProcessoPagamento = new JLabel("Processo:");
+		comboProcessosPagamento = new JComboBox<>(new Vector<>(processoController.getProcessos()));
+		panelPagamento.add(lblProcessoPagamento);
+		panelPagamento.add(comboProcessosPagamento);
+
 		JLabel lblFormaPagamento = new JLabel("Forma de Pagamento:");
-		comboFormaPagamento = new JComboBox<>();
+
+		// Converte os valores do enum EFormaPagamento para um array de Strings
+		comboFormaPagamento = new JComboBox<>(processoController.getFormasPagamentoArray());
 		panelPagamento.add(lblFormaPagamento);
 		panelPagamento.add(comboFormaPagamento);
 
@@ -219,12 +264,22 @@ public class ProcessoView extends JFrame {
 		panelPagamento.add(txtValorPagamento);
 
 		btnSalvarPagamento = new JButton("Salvar Pagamento");
-		panelPagamento.add(new JLabel()); // Placeholder
+		btnSalvarPagamento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionSalvarPagamento();
+			}
+		});
+		panelPagamento.add(new JLabel());
 		panelPagamento.add(btnSalvarPagamento);
 
-		// Adicionar Despesa
-		JPanel panelDespesa = new JPanel(new GridLayout(5, 2, 5, 5));
+		JPanel panelDespesa = new JPanel(new GridLayout(6, 2, 5, 5));
+
 		custasTabbedPane.addTab("Adicionar Despesa", panelDespesa);
+
+		JLabel lblProcessoDespesa = new JLabel("Processo:");
+		comboProcessosDespesa = new JComboBox<>(new Vector<>(processoController.getProcessos()));
+		panelDespesa.add(lblProcessoDespesa);
+		panelDespesa.add(comboProcessosDespesa);
 
 		JLabel lblDataDespesa = new JLabel("Data da Despesa:");
 		txtDataDespesa = new JTextField();
@@ -242,24 +297,175 @@ public class ProcessoView extends JFrame {
 		panelDespesa.add(txtValorDespesa);
 
 		btnSalvarDespesa = new JButton("Salvar Despesa");
-		panelDespesa.add(new JLabel()); // Placeholder
+		btnSalvarDespesa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionSalvarDespesa();
+			}
+		});
 		panelDespesa.add(btnSalvarDespesa);
 
-		// Extrato da Conta
 		JPanel panelExtrato = new JPanel(new BorderLayout());
 		custasTabbedPane.addTab("Extrato da Conta", panelExtrato);
 
+		JPanel panelTopExtrato = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+		JLabel lblProcessosExtrato = new JLabel("Processos:");
+		comboProcessosExtrato = new JComboBox<>(new Vector<>(processoController.getProcessos()));
+		comboProcessosExtrato.setPreferredSize(new Dimension(200, 25));
+		panelTopExtrato.add(lblProcessosExtrato);
+		panelTopExtrato.add(comboProcessosExtrato);
+
 		btnListarExtrato = new JButton("Listar Extrato");
-		panelExtrato.add(btnListarExtrato, BorderLayout.NORTH);
+		btnListarExtrato.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionListarConta();
+			}
+		});
+		panelTopExtrato.add(btnListarExtrato);
+
+		panelExtrato.add(panelTopExtrato, BorderLayout.NORTH);
 
 		textAreaExtratoConta = new JTextArea();
 		JScrollPane scrollExtratoConta = new JScrollPane(textAreaExtratoConta);
 		panelExtrato.add(scrollExtratoConta, BorderLayout.CENTER);
-
 	}
 
 	private void actionSalvarProcesso() {
+		long numeroProcesso = Long.parseLong(txtNumeroProcesso.getText());
+		String cadastroCliente = (String) comboClientes.getSelectedItem();
+		String cadastroParteContraria = (String) comboParteContraria.getSelectedItem();
+		String siglaTribunal = (String) cbbTribunal.getSelectedItem();
 
+		processoController.addProcesso(numeroProcesso, cadastroCliente, cadastroParteContraria, siglaTribunal);
+		JOptionPane.showMessageDialog(this, "Cadastro de Processo realizado com sucesso!");
+	}
+
+	private void actionSalvarAudiencia() {
+
+		Long numeroProcesso = (Long) comboProcessos.getSelectedItem();
+		if (numeroProcesso == null) {
+			JOptionPane.showMessageDialog(this, "Por favor, selecione um processo.", "Erro", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		String recomendacao = txtRecomendacaoAudiencia.getText();
+		String nomeAdvogado = (String) comboAdvogadoAudiencia.getSelectedItem();
+
+		Pessoa advogado = pessoaController.getPessoasByCadastro(nomeAdvogado);
+		processoController.addAudiencia(numeroProcesso, recomendacao, advogado);
+
+		JOptionPane.showMessageDialog(this, "Audiência salva com sucesso!");
+	}
+
+	private void actionSalvarPagamento() {
+		Long numeroProcesso = (Long) comboProcessosPagamento.getSelectedItem();
+		if (numeroProcesso == null) {
+			JOptionPane.showMessageDialog(this, "Por favor, selecione um processo.", "Erro", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		String formaPagamentoStr = (String) comboFormaPagamento.getSelectedItem();
+
+		EFormaPagamento formaPagamento = EFormaPagamento.valueOf(formaPagamentoStr);
+
+		double valorPagamento;
+		try {
+			valorPagamento = Double.parseDouble(txtValorPagamento.getText());
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(this, "Valor inválido. Por favor, insira um número válido.", "Erro",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		processoController.addPagamento(numeroProcesso, formaPagamento, valorPagamento);
+		JOptionPane.showMessageDialog(this, "Pagamento salvo com sucesso!");
+	}
+
+	private void actionSalvarDespesa() {
+		Long numeroProcesso = (Long) comboProcessosDespesa.getSelectedItem();
+		if (numeroProcesso == null) {
+			JOptionPane.showMessageDialog(this, "Por favor, selecione um processo.", "Erro", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		String descricaoDespesa = txtDescricaoDespesa.getText();
+		if (descricaoDespesa.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Por favor, insira uma descrição para a despesa.", "Erro",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		double valorDespesa;
+		try {
+			valorDespesa = Double.parseDouble(txtValorDespesa.getText());
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(this, "Valor inválido. Por favor, insira um número válido.", "Erro",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		processoController.addDespesa(numeroProcesso, descricaoDespesa, valorDespesa);
+		JOptionPane.showMessageDialog(this, "Despesa salva com sucesso!");
+	}
+
+	private void actionListarProcessos() {
+		String cadastroCliente = (String) comboClientesListar.getSelectedItem();
+		if (cadastroCliente == null || cadastroCliente.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Por favor, selecione um cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		List<Processo> listaProcessos = processoController.getProcessosCliente(cadastroCliente);
+		textAreaProcessos.setText("");
+
+		if (listaProcessos.isEmpty()) {
+			textAreaProcessos.append("Nenhum processo encontrado para o cliente selecionado.\n");
+		} else {
+			for (Processo processo : listaProcessos) {
+				textAreaProcessos.append(String.format("Número: %d, Cliente: %s, Parte Contrária: %s, Tribunal: %s\n",
+						processo.getNumero(), processo.getCliente().getPessoa().getNome(),
+						processo.getParteContraria().getNome(), processo.getTribunal().getSigla()));
+			}
+		}
+	}
+
+	// Dentro da classe ProcessoView
+	private void actionListarAudiencias() {
+		Long numeroProcesso = (Long) comboProcessosListar.getSelectedItem();
+
+		if (numeroProcesso == null) {
+			JOptionPane.showMessageDialog(this, "Por favor, selecione um processo.", "Erro", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		List<String> listaAudiencias = processoController.getAudienciasPorProcesso(numeroProcesso);
+		textAreaAudiencias.setText("");
+
+		if (listaAudiencias.isEmpty()) {
+			textAreaAudiencias.append("Nenhuma audiência encontrada para o processo selecionado.\n");
+		} else {
+			for (String audiencia : listaAudiencias) {
+				textAreaAudiencias.append(audiencia + "\n");
+			}
+		}
+	}
+
+	private void actionListarConta() {
+		Long numeroProcesso = (Long) comboProcessosExtrato.getSelectedItem();
+
+		if (numeroProcesso == null) {
+			JOptionPane.showMessageDialog(this, "Por favor, selecione um processo.", "Erro", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		String extratoConta = processoController.getExtratoContaPorProcesso(numeroProcesso);
+		textAreaExtratoConta.setText("");
+
+		if (extratoConta.equals("Processo não encontrado.")) {
+			textAreaExtratoConta.append("Nenhum extrato encontrado para o processo selecionado.\n");
+		} else {
+			textAreaExtratoConta.append(extratoConta + "\n");
+		}
 	}
 
 }
