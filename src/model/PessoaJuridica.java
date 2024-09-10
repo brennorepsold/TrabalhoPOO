@@ -1,26 +1,18 @@
 package model;
 
 import java.io.Serializable;
+import exception.PessoaJuridicaException;
 
 public class PessoaJuridica extends Pessoa implements Serializable {
     private static final long serialVersionUID = 1L;
-    private final String cnpj;  // Alterado de long para String
+    private final String cnpj;
     private PessoaFisica preposto;
 
-    public PessoaJuridica(String nome, String email, long telefone, String cnpj, PessoaFisica preposto) {  // CNPJ alterado para String
+    public PessoaJuridica(String nome, String email, long telefone, String cnpj, PessoaFisica preposto) throws PessoaJuridicaException {
         super(nome, email, telefone);
-        this.cnpj = cnpj;
-        this.preposto = preposto;
-    }
-
-    public PessoaJuridica(String nome, String email, String cnpj, PessoaFisica preposto) {
-        super(nome, email);
-        this.cnpj = cnpj;
-        this.preposto = preposto;
-    }
-
-    public PessoaJuridica(String nome, long telefone, String cnpj, PessoaFisica preposto) {
-        super(nome, telefone);
+        if (cnpj == null || cnpj.equals("")) {
+            throw new PessoaJuridicaException("CNPJ deve ser preenchido");
+        }
         this.cnpj = cnpj;
         this.preposto = preposto;
     }

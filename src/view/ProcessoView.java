@@ -17,7 +17,6 @@ import javax.swing.JTextField;
 import controller.MainController;
 import controller.PessoaController;
 import controller.TribunalController;
-import model.Tribunal;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
@@ -92,7 +91,8 @@ public class ProcessoView extends JFrame {
 	}
 
 	private void initProcessoPane(JPanel panelProcesso) {
-		TribunalController controller = MainController.getTribunalController();
+		TribunalController tribunalController = MainController.getTribunalController();
+		PessoaController pessoaController = MainController.getPessoaController();
 
 		JTabbedPane processoTabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		panelProcesso.add(processoTabbedPane, BorderLayout.CENTER);
@@ -112,18 +112,18 @@ public class ProcessoView extends JFrame {
 		panelCadastrarProcesso.add(txtDataAbertura);
 
 		JLabel lblCliente = new JLabel("Cliente:");
-		comboClientes = new JComboBox<>();
+		comboClientes = new JComboBox<>(new Vector<>(pessoaController.getNomesPessoas()));
 
 		panelCadastrarProcesso.add(lblCliente);
 		panelCadastrarProcesso.add(comboClientes);
 
 		JLabel lblParteContraria = new JLabel("Parte Contrária:");
-		comboParteContraria = new JComboBox<>();
+		comboParteContraria = new JComboBox<>(new Vector<>(pessoaController.getNomesPessoas()));
 		panelCadastrarProcesso.add(lblParteContraria);
 		panelCadastrarProcesso.add(comboParteContraria);
 
 		JLabel lblTribunal = new JLabel("Tribunal:");
-		cbbTribunal = new JComboBox<>(new Vector<>(controller.getSiglasTribunais()));
+		cbbTribunal = new JComboBox<>(new Vector<>(tribunalController.getSiglasTribunais()));
 		panelCadastrarProcesso.add(lblTribunal);
 		panelCadastrarProcesso.add(cbbTribunal);
 
