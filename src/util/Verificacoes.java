@@ -26,18 +26,16 @@ public class Verificacoes {
 	}
 
 	public static boolean validarCPF(String cpf) {
-		if (cpf == null || !cpf.matches("\\d{11}")) { // Verifica se o CPF tem 11 dígitos
+		if (cpf == null || !cpf.matches("\\d{11}")) {
 			return false;
 		}
-
 		return IntStream.range(0, 10).noneMatch(num -> cpf.equals(String.valueOf(num).repeat(11)));
 	}
 
 	public static boolean validarCNPJ(String cnpj) {
-		if (cnpj == null || !cnpj.matches("\\d{14}")) { // Verifica se o CNPJ tem 14 dígitos numéricos
+		if (cnpj == null || !cnpj.matches("\\d{14}")) {
 			return false;
 		}
-
 		return IntStream.range(0, 10).noneMatch(num -> cnpj.equals(String.valueOf(num).repeat(14)));
 	}
 
@@ -51,33 +49,30 @@ public class Verificacoes {
 	}
 	
 	public static boolean validarData(String data) {
-	    if (data == null || data.trim().isEmpty()) {
-	        return false;  // Data não pode ser nula ou vazia
-	    }
-	    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	    sdf.setLenient(false);  // Para garantir que datas inválidas não sejam aceitas
-
-	    try {
-	        sdf.parse(data);
-	        return true;
-	    } catch (ParseException e) {
-	        return false;
-	    }
+		if (data == null || data.trim().isEmpty()) {
+			return false;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		sdf.setLenient(false);
+		try {
+			sdf.parse(data);
+			return true;
+		} catch (ParseException e) {
+			return false;
+		}
 	}
 
 	public static boolean anoMaiorQueAtual(int ano) {
 		Calendar calAtual = Calendar.getInstance();
 		int anoAtual = calAtual.get(Calendar.YEAR);
-
 		return ano > anoAtual;
 	}
 	
 	public static boolean validarNumeroProcesso(long numero) {
-	    return numero > 0;  // Número de processo deve ser maior que zero
+		return numero > 0;
 	}
 	
 	public static boolean validarValorMonetario(double valor) {
-	    return valor > 0;  // Valor monetário deve ser maior que zero
+		return valor > 0;
 	}
-
 }

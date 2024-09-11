@@ -376,7 +376,6 @@ public class ProcessoView extends JFrame {
 
         Pessoa advogado = pessoaController.getAdvogadosByCadastro(nomeAdvogado);
         processoController.addAudiencia(numeroProcesso, recomendacao, advogado);
-
         JOptionPane.showMessageDialog(this, "Audiência salva com sucesso!");
     }
 
@@ -430,7 +429,13 @@ public class ProcessoView extends JFrame {
             return;
         }
 
-        List<Processo> listaProcessos = processoController.getProcessosCliente(cadastroCliente);
+		List<Processo> listaProcessos = null;
+		try {
+			listaProcessos = processoController.getProcessosCliente(cadastroCliente);
+		} catch (ProcessoException e) {
+			
+			e.printStackTrace();
+		}
         textAreaProcessos.setText("");
 
         if (listaProcessos.isEmpty()) {
@@ -453,7 +458,13 @@ public class ProcessoView extends JFrame {
             return;
         }
 
-        List<String> listaAudiencias = processoController.getAudienciasPorProcesso(numeroProcesso);
+        List<String> listaAudiencias = null;
+		try {
+			listaAudiencias = processoController.getAudienciasPorProcesso(numeroProcesso);
+		} catch (AudienciaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         textAreaAudiencias.setText("");
 
         if (listaAudiencias.isEmpty()) {
@@ -473,7 +484,12 @@ public class ProcessoView extends JFrame {
             return;
         }
 
-        String extratoConta = processoController.getExtratoContaPorProcesso(numeroProcesso);
+        String extratoConta = null;
+		try {
+			extratoConta = processoController.getExtratoContaPorProcesso(numeroProcesso);
+		} catch (ProcessoException e) {
+			e.printStackTrace();
+		}
         textAreaExtratoConta.setText("");
 
         if (extratoConta.equals("Processo não encontrado.")) {

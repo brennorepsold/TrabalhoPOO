@@ -27,11 +27,10 @@ public class PessoaController implements Serializable {
         this.advogados = new TreeMap<>();
     }
 
-    // Método para adicionar uma pessoa física
     public boolean addPessoaFisica(String nome, String email, long telefone, String cpf) throws PessoaFisicaException {
-        verificarCampos(nome, email, String.valueOf(telefone), cpf); // Verificação de campos obrigatórios
+        verificarCampos(nome, email, String.valueOf(telefone), cpf);
 
-        if (!Verificacoes.validarEmail(email)) { // Verificação de email
+        if (!Verificacoes.validarEmail(email)) {
             throw new PessoaFisicaException("Email inválido.");
         }
 
@@ -41,11 +40,10 @@ public class PessoaController implements Serializable {
         return true;
     }
 
-    // Método para adicionar uma pessoa jurídica
     public boolean addPessoaJuridica(String nome, String email, long telefone, String cnpj, PessoaFisica preposto) throws PessoaJuridicaException, PessoaFisicaException {
-        verificarCampos(nome, email, String.valueOf(telefone), cnpj); // Verificação de campos obrigatórios
+        verificarCampos(nome, email, String.valueOf(telefone), cnpj);
 
-        if (!Verificacoes.validarEmail(email)) { // Verificação de email
+        if (!Verificacoes.validarEmail(email)) {
             throw new PessoaJuridicaException("Email inválido.");
         }
 
@@ -55,11 +53,10 @@ public class PessoaController implements Serializable {
         return true;
     }
 
-    // Método para adicionar um advogado
     public boolean addAdvogado(String nome, String email, long telefone, String cpf, long registro) throws PessoaFisicaException {
-        verificarCampos(nome, email, String.valueOf(telefone), cpf); // Verificação de campos obrigatórios
+        verificarCampos(nome, email, String.valueOf(telefone), cpf);
 
-        if (!Verificacoes.validarEmail(email)) { // Verificação de email
+        if (!Verificacoes.validarEmail(email)) {
             throw new AdvogadoException("Email inválido.");
         }
 
@@ -69,14 +66,12 @@ public class PessoaController implements Serializable {
         return true;
     }
 
-    // Método para verificar se todos os campos obrigatórios foram preenchidos
     private void verificarCampos(String... campos) throws PessoaFisicaException {
         if (!Verificacoes.verificarCamposPreenchidos(campos)) {
             throw new PessoaFisicaException("Todos os campos devem ser preenchidos.");
         }
     }
 
-    // Método para listar todas as pessoas físicas
     public Set<String> getNomesPessoas() {
         return pessoas.keySet();
     }
@@ -99,12 +94,10 @@ public class PessoaController implements Serializable {
         return nomesPessoasFisicas;
     }
 
-    // Método para listar todos os advogados
     public Set<String> getNomesAdvogados() {
         return advogados.keySet();
     }
 
-    // Método para obter uma lista de nomes das pessoas físicas
     public List<Pessoa> getPessoasFisicas() {
         List<Pessoa> lista = new ArrayList<>();
         for (Pessoa t : pessoas.values()) {
