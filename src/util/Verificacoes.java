@@ -1,5 +1,8 @@
 package util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
@@ -23,65 +26,19 @@ public class Verificacoes {
 	}
 
 	public static boolean validarCPF(String cpf) {
-		if (cpf.matches("\\d{11}")) { // -> verifica se tem 11 digitos
-
-			if (IntStream.range(0, 9).anyMatch(num -> ((11111111111L * num) + "").equals(cpf))) {
-				return false; // -> confere se os digitos não são repetidos
-			}
-
-			int soma = 0, peso = 10; // -> calcula a soma ponderada dos dígitos
-			for (int i = 0; i < 9; i++) {
-				soma += Integer.parseInt(cpf.charAt(i) + "") * peso--;
-			}
-
-			int digito1 = soma * 10 % 11 == 10 ? 0 : soma * 10 % 11; // -> calcula e verifica o 1 dígito verificador
-			if (digito1 != Integer.parseInt(cpf.charAt(9) + "")) {
-				return false;
-			}
-
-			soma = 0;
-			peso = 11;
-			for (int i = 0; i < 10; i++) {
-				soma += Integer.parseInt(cpf.charAt(i) + "") * peso--; // -> calcula a soma ponderada dnv
-			}
-
-			int digito2 = soma * 10 % 11 == 10 ? 0 : soma * 10 % 11; // -> calcula e verifica o 2 dígito verificador
-			return digito2 == Integer.parseInt(cpf.charAt(10) + "");
-		} else {
+		if (cpf == null || !cpf.matches("\\d{11}")) { // Verifica se o CPF tem 11 dígitos
 			return false;
 		}
+
+		return IntStream.range(0, 10).noneMatch(num -> cpf.equals(String.valueOf(num).repeat(11)));
 	}
 
 	public static boolean validarCNPJ(String cnpj) {
-		if (!cnpj.matches("\\d{14}")) { // -> verifica se o CNPJ tem 14 dígitos numéricos
+		if (cnpj == null || !cnpj.matches("\\d{14}")) { // Verifica se o CNPJ tem 14 dígitos numéricos
 			return false;
 		}
 
-		int digito1 = calcularDigito(cnpj.substring(0, 12), 5, 9); // -> calcula o 1 e 2 dígito verificador
-		int digito2 = calcularDigito(cnpj.substring(0, 12) + digito1, 6, 9);
-
-		// -> verifica se os dígitos verificadores correspondem aos últimos dois dígitos
-		// do CNPJ
-		return (digito1 == Character.getNumericValue(cnpj.charAt(12)))
-				&& (digito2 == Character.getNumericValue(cnpj.charAt(13)));
-	}
-
-	// calcular um dígito verificador do CNPJ
-	private static int calcularDigito(String parteCNPJ, int pesoInicial, int pesoFinal) {
-		int soma = 0;
-		int peso = pesoInicial;
-
-		for (char c : parteCNPJ.toCharArray()) {
-			soma += Character.getNumericValue(c) * peso;
-			peso--;
-
-			if (peso < pesoFinal) {
-				peso = 9;
-			}
-		}
-
-		int resto = soma % 11;
-		return (resto < 2) ? 0 : (11 - resto);
+		return IntStream.range(0, 10).noneMatch(num -> cnpj.equals(String.valueOf(num).repeat(14)));
 	}
 
 	public static boolean verificarCamposPreenchidos(String... campos) {
@@ -92,7 +49,35 @@ public class Verificacoes {
 		}
 		return true;
 	}
+	
+	public static boolean validarData(String data) {
+	    if (data == null || data.trim().isEmpty()) {
+	        return false;  // Data não pode ser nula ou vazia
+	    }
+	    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	    sdf.setLenient(false);  // Para garantir que datas inválidas não sejam aceitas
 
+	    try {
+	        sdf.parse(data);
+	        return true;
+	    } catch (ParseException e) {
+	        return false;
+	    }
+	}
 
+	public static boolean anoMaiorQueAtual(int ano) {
+		Calendar calAtual = Calendar.getInstance();
+		int anoAtual = calAtual.get(Calendar.YEAR);
+
+		return ano > anoAtual;
+	}
+	
+	public static boolean validarNumeroProcesso(long numero) {
+	    return numero > 0;  // Número de processo deve ser maior que zero
+	}
+	
+	public static boolean validarValorMonetario(double valor) {
+	    return valor > 0;  // Valor monetário deve ser maior que zero
+	}
 
 }

@@ -24,7 +24,9 @@ import javax.swing.border.EmptyBorder;
 
 import controller.MainController;
 import controller.PessoaController;
+import exception.AdvogadoException;
 import exception.PessoaFisicaException;
+import exception.PessoaJuridicaException;
 import model.Advogado;
 import model.Pessoa;
 import model.PessoaFisica;
@@ -33,10 +35,8 @@ public class PessoaView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	// Controlador
 	private PessoaController controller = MainController.getPessoaController();
 
-	// Painéis
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane;
 	private JPanel formPane;
@@ -44,7 +44,6 @@ public class PessoaView extends JFrame {
 	private JPanel listPaneJ;
 	private JPanel listPaneA;
 
-	// Campos de texto
 	private JTextField txtNome;
 	private JTextField txtEmail;
 	private JTextField txtTelefone;
@@ -52,16 +51,13 @@ public class PessoaView extends JFrame {
 	private JTextField txtCNPJ;
 	private JTextField txtRegistro;
 
-	// Combobox
 	private JComboBox<String> cbbTipoUsuario;
 	private JComboBox<String> comboPreposto;
 
-	// Área de texto
 	private JTextArea textAreaList;
 	private JTextArea textAreaListJ;
 	private JTextArea textAreaListA;
 
-	// Botões
 	private JButton btnListarFisica;
 	private JButton btnListarJuridica;
 	private JButton btnListarAdvogados;
@@ -104,9 +100,8 @@ public class PessoaView extends JFrame {
 		formPane.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(5, 5, 5, 5);
-		gbc.fill = GridBagConstraints.HORIZONTAL; // Para que os componentes ocupem todo o espaço horizontal
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		// Labels e Campos de Texto
 		JLabel lblNome = new JLabel("Nome");
 		txtNome = new JTextField(15);
 		JLabel lblEmail = new JLabel("Email");
@@ -116,10 +111,9 @@ public class PessoaView extends JFrame {
 		JLabel lblTipoUsuario = new JLabel("Tipo de Usuário:");
 		cbbTipoUsuario = new JComboBox<>(new String[] { "Pessoa Física", "Pessoa Jurídica", "Advogado" });
 
-		// Adicionando componentes de maneira ordenada
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.weightx = 0.3; // Proporção da largura que cada componente deve ocupar
+		gbc.weightx = 0.3;
 		formPane.add(lblNome, gbc);
 		gbc.gridx = 1;
 		gbc.weightx = 0.7;
@@ -149,7 +143,6 @@ public class PessoaView extends JFrame {
 		gbc.weightx = 0.7;
 		formPane.add(cbbTipoUsuario, gbc);
 
-		// Campos sobrepostos: CPF e CNPJ
 		JLabel lblCPF = new JLabel("CPF");
 		txtCPF = new JTextField(15);
 		JLabel lblCNPJ = new JLabel("CNPJ:");
@@ -166,7 +159,6 @@ public class PessoaView extends JFrame {
 		formPane.add(txtCPF, gbc);
 		formPane.add(txtCNPJ, gbc);
 
-		// Campos sobrepostos: Registro e Preposto
 		JLabel lblRegistro = new JLabel("Registro");
 		txtRegistro = new JTextField(15);
 		JLabel lblPreposto = new JLabel("Preposto");
@@ -183,7 +175,6 @@ public class PessoaView extends JFrame {
 		formPane.add(txtRegistro, gbc);
 		formPane.add(comboPreposto, gbc);
 
-		// Configuração inicial de visibilidade dos campos
 		lblCPF.setVisible(false);
 		txtCPF.setVisible(false);
 		lblCNPJ.setVisible(false);
@@ -193,24 +184,22 @@ public class PessoaView extends JFrame {
 		lblPreposto.setVisible(false);
 		comboPreposto.setVisible(false);
 
-		// Botão Salvar
 		btnSalvar = new JButton("Salvar");
 		gbc.gridx = 1;
 		gbc.gridy = 6;
-		gbc.weightx = 1; // Botão ocupa todo o espaço horizontal restante
+		gbc.weightx = 1;
 		formPane.add(btnSalvar, gbc);
 
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					actionSalvar();
-				} catch (PessoaFisicaException e1) {
+				} catch (AdvogadoException e1) {
 					e1.printStackTrace();
 				}
 			}
 		});
 
-		// Ação ao selecionar o tipo de usuário
 		cbbTipoUsuario.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -293,34 +282,46 @@ public class PessoaView extends JFrame {
 		listPaneA.add(new JScrollPane(textAreaListA), BorderLayout.CENTER);
 	}
 
-	private void actionSalvar() throws PessoaFisicaException {
+	private void actionSalvar() throws AdvogadoException {
 		String tipoUsuarioSelecionado = (String) cbbTipoUsuario.getSelectedItem();
 
 		String nome = txtNome.getText();
 		String email = txtEmail.getText();
-		long telefone = Long.parseLong(txtTelefone.getText());
+		long telefone;
+		try {
+			telefone = Long.parseLong(txtTelefone.getText());
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(this, "Telefone inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 
-		if ("Pessoa Física".equals(tipoUsuarioSelecionado)) {
-			String cpf = txtCPF.getText();
-			controller.addPessoaFisica(nome, email, telefone, cpf);
-			JOptionPane.showMessageDialog(this, "Cadastro de Pessoa Física realizado com sucesso!");
-		} else if ("Pessoa Jurídica".equals(tipoUsuarioSelecionado)) {
-			String cnpj = txtCNPJ.getText();
-			String prepostoNome = (String) comboPreposto.getSelectedItem();
-			PessoaFisica preposto = null;
-			for (Pessoa pessoa : controller.getPessoasFisicas()) {
-				if (pessoa instanceof PessoaFisica && ((PessoaFisica) pessoa).getNome().equals(prepostoNome)) {
-					preposto = (PessoaFisica) pessoa;
-					break;
+		try {
+			if ("Pessoa Física".equals(tipoUsuarioSelecionado)) {
+				String cpf = txtCPF.getText();
+				controller.addPessoaFisica(nome, email, telefone, cpf);
+				JOptionPane.showMessageDialog(this, "Cadastro de Pessoa Física realizado com sucesso!");
+
+			} else if ("Pessoa Jurídica".equals(tipoUsuarioSelecionado)) {
+				String cnpj = txtCNPJ.getText();
+				String prepostoNome = (String) comboPreposto.getSelectedItem();
+				PessoaFisica preposto = null;
+				for (Pessoa pessoa : controller.getPessoasFisicas()) {
+					if (pessoa instanceof PessoaFisica && ((PessoaFisica) pessoa).getNome().equals(prepostoNome)) {
+						preposto = (PessoaFisica) pessoa;
+						break;
+					}
 				}
+				controller.addPessoaJuridica(nome, email, telefone, cnpj, preposto);
+				JOptionPane.showMessageDialog(this, "Cadastro de Pessoa Jurídica realizado com sucesso!");
+
+			} else if ("Advogado".equals(tipoUsuarioSelecionado)) {
+				String cpf = txtCPF.getText();
+				long registro = Long.parseLong(txtRegistro.getText());
+				controller.addAdvogado(nome, email, telefone, cpf, registro);
+				JOptionPane.showMessageDialog(this, "Cadastro de Advogado realizado com sucesso!");
 			}
-			controller.addPessoaJuridica(nome, email, telefone, cnpj, preposto);
-			JOptionPane.showMessageDialog(this, "Cadastro de Pessoa Jurídica realizado com sucesso!");
-		} else if ("Advogado".equals(tipoUsuarioSelecionado)) {
-			String cpf = txtCPF.getText();
-			long registro = Long.parseLong(txtRegistro.getText());
-			controller.addAdvogado(nome, email, telefone, cpf, registro);
-			JOptionPane.showMessageDialog(this, "Cadastro de Advogado realizado com sucesso!");
+		} catch (PessoaFisicaException | PessoaJuridicaException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 		}
 
 		limparForm();

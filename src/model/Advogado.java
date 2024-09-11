@@ -10,9 +10,11 @@ public class Advogado extends PessoaFisica implements Serializable {
 
     public Advogado(String nome, String email, long telefone, String cpf, long registro) throws PessoaFisicaException {
         super(nome, email, telefone, cpf);
+        
         if (registro <= 0) {
             throw new AdvogadoException("Registro deve ser um número positivo");
         }
+        
         this.registro = registro;
     }
 

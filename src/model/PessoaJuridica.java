@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import exception.PessoaJuridicaException;
+import util.Verificacoes;
 
 public class PessoaJuridica extends Pessoa implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -10,9 +11,14 @@ public class PessoaJuridica extends Pessoa implements Serializable {
 
     public PessoaJuridica(String nome, String email, long telefone, String cnpj, PessoaFisica preposto) throws PessoaJuridicaException {
         super(nome, email, telefone);
+        
         if (cnpj == null || cnpj.equals("")) {
             throw new PessoaJuridicaException("CNPJ deve ser preenchido");
         }
+        if (!Verificacoes.validarCNPJ(cnpj)) {
+            throw new PessoaJuridicaException("CNPJ inválido");
+        }
+        
         this.cnpj = cnpj;
         this.preposto = preposto;
     }
