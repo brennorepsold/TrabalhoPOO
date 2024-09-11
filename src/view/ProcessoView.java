@@ -74,6 +74,7 @@ public class ProcessoView extends JFrame {
 	private JButton btnSalvarDespesa;
 	private JButton btnListarExtrato;
 	private JTextArea textAreaExtratoConta;
+	private JTextArea textAreaExtratoCliente;
 
 	private JComboBox<Long> comboProcessos;
 	private JComboBox<Long> comboProcessosListar;
@@ -82,6 +83,7 @@ public class ProcessoView extends JFrame {
 	private JComboBox<Long> comboProcessosExtrato;
 	private JComboBox<String> comboFaseProcesso;
 	private JComboBox<String> comboTribunalEditar;
+	private JComboBox<String> comboClientesExtrato;
 
 	public ProcessoView() {
 		initialize();
@@ -300,7 +302,6 @@ public class ProcessoView extends JFrame {
 		panelCustas.add(custasTabbedPane, BorderLayout.CENTER);
 
 		JPanel panelPagamento = new JPanel(new GridLayout(6, 2, 5, 5));
-
 		custasTabbedPane.addTab("Adicionar Pagamento", panelPagamento);
 
 		JLabel lblProcessoPagamento = new JLabel("Processo:");
@@ -309,7 +310,6 @@ public class ProcessoView extends JFrame {
 		panelPagamento.add(comboProcessosPagamento);
 
 		JLabel lblFormaPagamento = new JLabel("Forma de Pagamento:");
-
 		comboFormaPagamento = new JComboBox<>(processoController.getFormasPagamentoArray());
 		panelPagamento.add(lblFormaPagamento);
 		panelPagamento.add(comboFormaPagamento);
@@ -349,7 +349,6 @@ public class ProcessoView extends JFrame {
 		panelPagamento.add(btnSalvarPagamento);
 
 		JPanel panelDespesa = new JPanel(new GridLayout(6, 2, 5, 5));
-
 		custasTabbedPane.addTab("Adicionar Despesa", panelDespesa);
 
 		JLabel lblProcessoDespesa = new JLabel("Processo:");
@@ -419,6 +418,31 @@ public class ProcessoView extends JFrame {
 		textAreaExtratoConta = new JTextArea();
 		JScrollPane scrollExtratoConta = new JScrollPane(textAreaExtratoConta);
 		panelExtrato.add(scrollExtratoConta, BorderLayout.CENTER);
+
+		JPanel panelExtratoCliente = new JPanel(new BorderLayout());
+		custasTabbedPane.addTab("Extrato Cliente", panelExtratoCliente);
+
+		JPanel panelTopExtratoCliente = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+		JLabel lblClientesExtrato = new JLabel("Cliente:");
+		comboClientesExtrato = new JComboBox<>(new Vector<>(processoController.getClientes()));
+		comboClientesExtrato.setPreferredSize(new Dimension(200, 25));
+		panelTopExtratoCliente.add(lblClientesExtrato);
+		panelTopExtratoCliente.add(comboClientesExtrato);
+
+		JButton btnListarExtratoCliente = new JButton("Listar Extrato");
+		btnListarExtratoCliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionListarExtratoCliente();
+			}
+		});
+		panelTopExtratoCliente.add(btnListarExtratoCliente);
+
+		panelExtratoCliente.add(panelTopExtratoCliente, BorderLayout.NORTH);
+
+		textAreaExtratoCliente = new JTextArea();
+		JScrollPane scrollExtratoCliente = new JScrollPane(textAreaExtratoCliente);
+		panelExtratoCliente.add(scrollExtratoCliente, BorderLayout.CENTER);
 	}
 
 	private void actionSalvarProcesso() throws ProcessoException {
@@ -583,7 +607,6 @@ public class ProcessoView extends JFrame {
 		try {
 			listaAudiencias = processoController.getAudienciasPorProcesso(numeroProcesso);
 		} catch (AudienciaException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		textAreaAudiencias.setText("");
@@ -618,5 +641,23 @@ public class ProcessoView extends JFrame {
 		} else {
 			textAreaExtratoConta.append(extratoConta + "\n");
 		}
+	}
+	
+	private void actionListarExtratoCliente() {
+	    String cadastroCliente = (String) comboClientesExtrato.getSelectedItem();
+	    if (cadastroCliente == null || cadastroCliente.isEmpty()) {
+	        JOptionPane.showMessageDialog(this, "Por favor, selecione um cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
+	        return;
+	    }
+
+	    String extratoCliente;
+	    try {
+	        extratoCliente = processoController.getExtratoPorCliente(cadastroCliente);
+	    } catch (ProcessoException e) {
+	        JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+	        return;
+	    }
+	    
+	    textAreaExtratoCliente.setText(extratoCliente);
 	}
 }

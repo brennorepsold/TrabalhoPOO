@@ -238,6 +238,16 @@ public class ProcessoController implements Serializable {
 		}
 		return audienciasList;
 	}
+	
+	public String getExtratoPorCliente(String cadastroCliente) throws ProcessoException {
+	    Cliente cliente = clientes.get(cadastroCliente);
+	    if (cliente == null) {
+	        throw new ProcessoException("Cliente não encontrado: " + cadastroCliente);
+	    }
+	    StringBuilder extrato = cliente.getExtratoContas();
+	    extrato.append("\n\nSaldo total: ").append(cliente.getSaldoContas());
+	    return extrato.toString();
+	}
 
 	public String[] getFormasPagamentoArray() {
 		EFormaPagamento[] formas = EFormaPagamento.values();
