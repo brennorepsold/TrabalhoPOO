@@ -16,6 +16,7 @@ import exception.PagamentoException;
 import exception.ProcessoException;
 import model.Advogado;
 import model.Cliente;
+import model.EFaseProcesso;
 import model.EFormaPagamento;
 import model.Pessoa;
 import model.Processo;
@@ -191,6 +192,30 @@ public class ProcessoController implements Serializable {
 		}
 	}
 
+	public void atualizarProcesso(long numeroProcesso, String fase, String siglaTribunal) throws ProcessoException {
+		Processo processo = processos.get(numeroProcesso);
+
+		if (processo == null) {
+			throw new ProcessoException("Processo não encontrado: " + numeroProcesso);
+		}
+
+		TribunalController tribunalController = MainController.getTribunalController();
+		Tribunal tribunal = tribunalController.getTribunalBySigla(siglaTribunal);
+
+		if (tribunal == null) {
+			throw new ProcessoException("Tribunal não encontrado: " + siglaTribunal);
+		}
+
+		try {
+			EFaseProcesso novaFase = EFaseProcesso.valueOf(fase);
+			processo.setFase(novaFase);
+			processo.setTribunal(tribunal);
+			MainController.save();
+		} catch (IllegalArgumentException e) {
+			throw new ProcessoException("Fase do processo inválida: " + fase);
+		}
+	}
+
 	public List<Processo> getProcessosCliente(String cadastroCliente) throws ProcessoException {
 		List<Processo> listaProcessos = new ArrayList<>();
 		Cliente cliente = clientes.get(cadastroCliente);
@@ -221,5 +246,14 @@ public class ProcessoController implements Serializable {
 			formasArray[i] = formas[i].name();
 		}
 		return formasArray;
+	}
+
+	public String[] getFasesProcessoArray() {
+		EFaseProcesso[] fases = EFaseProcesso.values();
+		String[] fasesArray = new String[fases.length];
+		for (int i = 0; i < fases.length; i++) {
+			fasesArray[i] = fases[i].name();
+		}
+		return fasesArray;
 	}
 }

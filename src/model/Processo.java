@@ -40,6 +40,10 @@ public class Processo implements Serializable {
 			throw new ProcessoException("Tribunal não pode ser nulo.");
 		}
 
+		if (cliente.getPessoa().equals(parteContraria)) {
+			throw new ProcessoException("Cliente e Parte Contrária não podem ser a mesma pessoa.");
+		}
+
 		this.numero = numero;
 		this.dataAbertura = dataAbertura;
 		this.cliente = cliente;

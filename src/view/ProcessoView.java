@@ -80,6 +80,8 @@ public class ProcessoView extends JFrame {
 	private JComboBox<Long> comboProcessosPagamento;
 	private JComboBox<Long> comboProcessosDespesa;
 	private JComboBox<Long> comboProcessosExtrato;
+	private JComboBox<String> comboFaseProcesso;
+	private JComboBox<String> comboTribunalEditar;
 
 	public ProcessoView() {
 		initialize();
@@ -171,12 +173,12 @@ public class ProcessoView extends JFrame {
 		processoTabbedPane.addTab("Editar Processo", panelEditarProcesso);
 
 		JLabel lblFaseProcesso = new JLabel("Fase do Processo:");
-		JComboBox<String> comboFaseProcesso = new JComboBox<>();
+		comboFaseProcesso = new JComboBox<>(processoController.getFasesProcessoArray());
 		panelEditarProcesso.add(lblFaseProcesso);
 		panelEditarProcesso.add(comboFaseProcesso);
 
 		JLabel lblTribunalEditar = new JLabel("Tribunal:");
-		JComboBox<String> comboTribunalEditar = new JComboBox<>(new Vector<>(tribunalController.getSiglasTribunais()));
+		comboTribunalEditar = new JComboBox<>(new Vector<>(tribunalController.getSiglasTribunais()));
 		panelEditarProcesso.add(lblTribunalEditar);
 		panelEditarProcesso.add(comboTribunalEditar);
 
@@ -522,9 +524,24 @@ public class ProcessoView extends JFrame {
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	private void actionSalvarAlteracoesProcesso() {
-		
+		try {
+			Long numeroProcesso = (Long) comboProcessos.getSelectedItem();
+			if (numeroProcesso == null) {
+				JOptionPane.showMessageDialog(this, "Por favor, selecione um processo.", "Erro",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			String faseSelecionada = (String) comboFaseProcesso.getSelectedItem();
+			String tribunalSelecionado = (String) comboTribunalEditar.getSelectedItem();
+
+			processoController.atualizarProcesso(numeroProcesso, faseSelecionada, tribunalSelecionado);
+			JOptionPane.showMessageDialog(this, "Alterações do processo salvas com sucesso!");
+		} catch (ProcessoException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private void actionListarProcessos() {
@@ -554,7 +571,6 @@ public class ProcessoView extends JFrame {
 		}
 	}
 
-	// Dentro da classe ProcessoView
 	private void actionListarAudiencias() {
 		Long numeroProcesso = (Long) comboProcessosListar.getSelectedItem();
 
