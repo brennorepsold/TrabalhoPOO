@@ -10,14 +10,14 @@ public class Despesa implements Serializable {
     private final String descricao;
     private final double valor;
 
-    public Despesa(String descricao, double valor) throws DespesaException {
+    public Despesa(String descricao, double valor, Date data) throws DespesaException {
         if (descricao == null || descricao.trim().isEmpty()) {
             throw new DespesaException("Descrição da despesa não pode ser vazia.");
         }
         if (valor <= 0) {
             throw new DespesaException("Valor da despesa deve ser maior que zero.");
         }
-        this.data = new Date();
+        this.data = data;
         this.descricao = descricao;
         this.valor = valor;
     }

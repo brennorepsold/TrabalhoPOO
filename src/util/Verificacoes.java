@@ -48,18 +48,13 @@ public class Verificacoes {
 		return true;
 	}
 	
-	public static boolean validarData(String data) {
-		if (data == null || data.trim().isEmpty()) {
-			return false;
-		}
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		sdf.setLenient(false);
-		try {
-			sdf.parse(data);
-			return true;
-		} catch (ParseException e) {
-			return false;
-		}
+	public static void validarDataCompleta(String data) throws ParseException {
+	    if (data == null || data.trim().isEmpty()) {
+	        throw new ParseException("Data não pode ser vazia.", 0);
+	    }
+	    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	    sdf.setLenient(false); // Não permite datas como 32/01/2023
+	    sdf.parse(data); // Lança ParseException se a data for inválida
 	}
 
 	public static boolean anoMaiorQueAtual(int ano) {

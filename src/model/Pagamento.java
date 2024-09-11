@@ -10,7 +10,7 @@ public class Pagamento implements Serializable {
     private final Date data;
     private final double valor;
 
-    public Pagamento(EFormaPagamento forma, double valor) throws PagamentoException {
+    public Pagamento(EFormaPagamento forma, double valor, Date data) throws PagamentoException {
         if (forma == null) {
             throw new PagamentoException("Forma de pagamento não pode ser nula.");
         }
@@ -18,7 +18,7 @@ public class Pagamento implements Serializable {
             throw new PagamentoException("Valor de pagamento deve ser maior que zero.");
         }
         this.forma = forma;
-        this.data = new Date();
+        this.data = data;
         this.valor = valor;
     }
 
