@@ -5,96 +5,118 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Processo implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private final long numero;
-	private final Date dataAbertura;
-	private EFaseProcesso fase;
+import exception.AudienciaException;
+import exception.ProcessoException;
+import util.Verificacoes;
 
-	private final Cliente cliente;
-	private final Pessoa parteContraria;
-	private Tribunal tribunal;
-	private final IConta conta;
+public class Processo implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private final long numero;
+    private final Date dataAbertura;
+    private EFaseProcesso fase;
 
-	private List<Audiencia> audiencias = new ArrayList<>();
+    private final Cliente cliente;
+    private final Pessoa parteContraria;
+    private Tribunal tribunal;
+    private final IConta conta;
 
-	public Processo(long numero, Cliente cliente, Pessoa parteContraria, Tribunal tribunal) {
-		this.numero = numero;
-		//Depois trocar para entrada de data
-		this.dataAbertura = new Date();
-		this.cliente = cliente;
-		this.parteContraria = parteContraria;
-		this.tribunal = tribunal;
+    private List<Audiencia> audiencias = new ArrayList<>();
 
-		this.fase = EFaseProcesso.INICIAL;
-		this.conta = new Conta();
+    public Processo(long numero, Cliente cliente, Pessoa parteContraria, Tribunal tribunal) throws ProcessoException {
+        if (!Verificacoes.validarNumeroProcesso(numero)) {
+            throw new ProcessoException("Número do processo inválido.");
+        }
 
-	}
+        if (cliente == null) {
+            throw new ProcessoException("Cliente não pode ser nulo.");
+        }
 
-	public EFaseProcesso getFase() {
-		return fase;
-	}
+        if (parteContraria == null) {
+            throw new ProcessoException("Parte contrária não pode ser nula.");
+        }
 
-	public void setFase(EFaseProcesso fase) {
-		this.fase = fase;
-	}
+        if (tribunal == null) {
+            throw new ProcessoException("Tribunal não pode ser nulo.");
+        }
 
-	public long getNumero() {
-		return numero;
-	}
+        this.numero = numero;
+        this.dataAbertura = new Date();
+        this.cliente = cliente;
+        this.parteContraria = parteContraria;
+        this.tribunal = tribunal;
 
-	public Date getDataAbertura() {
-		return dataAbertura;
-	}
+        this.fase = EFaseProcesso.INICIAL;
+        this.conta = new Conta();
+    }
 
-	public Cliente getCliente() {
-		return cliente;
-	}
+    public EFaseProcesso getFase() {
+        return fase;
+    }
 
-	public Pessoa getParteContraria() {
-		return parteContraria;
-	}
+    public void setFase(EFaseProcesso fase) {
+        this.fase = fase;
+    }
 
-	public Tribunal getTribunal() {
-		return tribunal;
-	}
+    public long getNumero() {
+        return numero;
+    }
 
-	public void setTribunal(Tribunal tribunal) {
-		this.tribunal = tribunal;
-	}
+    public Date getDataAbertura() {
+        return dataAbertura;
+    }
 
-	public IConta getConta() {
-		return conta;
-	}
+    public Cliente getCliente() {
+        return cliente;
+    }
 
-	public void addAudiencia(String recomendacao, Advogado advogado) {
-		audiencias.add(new Audiencia(recomendacao, advogado));
-	}
+    public Pessoa getParteContraria() {
+        return parteContraria;
+    }
 
-	public double getTotalCustas() {
-		return this.conta.getTotalDespesas();
-	}
+    public Tribunal getTribunal() {
+        return tribunal;
+    }
 
-	public StringBuilder getExtratoConta() {
-		return this.conta.getExtrato();
-	}
+    public void setTribunal(Tribunal tribunal) {
+        this.tribunal = tribunal;
+    }
 
-	public StringBuilder getAudiencias() {
-		StringBuilder sb = new StringBuilder();
-		for (Audiencia audiencia : audiencias) {
-			sb.append(audiencia);
-		}
-		return sb;
-	}
+    public IConta getConta() {
+        return conta;
+    }
 
-	@Override
-	public String toString() {
-		return "Processo [numero=" + numero + ", dataAbertura=" + dataAbertura + ", fase=" + fase + ", cliente="
-				+ cliente + ", parteContraria=" + parteContraria + ", tribunal=" + tribunal + ", conta=" + conta
-				+ ", audiencias=" + audiencias + "]";
-	}
+    public void addAudiencia(String recomendacao, Advogado advogado) throws AudienciaException {
+        if (!Verificacoes.verificarCamposPreenchidos(recomendacao, "Recomendação")) {
+            throw new AudienciaException("Recomendação da audiência deve ser preenchida.");
+        }
 
+        if (advogado == null) {
+            throw new AudienciaException("Advogado não pode ser nulo.");
+        }
+
+        audiencias.add(new Audiencia(recomendacao, advogado));
+    }
+
+    public double getTotalCustas() {
+        return this.conta.getTotalDespesas();
+    }
+
+    public StringBuilder getExtratoConta() {
+        return this.conta.getExtrato();
+    }
+
+    public StringBuilder getAudiencias() {
+        StringBuilder sb = new StringBuilder();
+        for (Audiencia audiencia : audiencias) {
+            sb.append(audiencia);
+        }
+        return sb;
+    }
+
+    @Override
+    public String toString() {
+        return "Processo [numero=" + numero + ", dataAbertura=" + dataAbertura + ", fase=" + fase + ", cliente="
+                + cliente + ", parteContraria=" + parteContraria + ", tribunal=" + tribunal + ", conta=" + conta
+                + ", audiencias=" + audiencias + "]";
+    }
 }
