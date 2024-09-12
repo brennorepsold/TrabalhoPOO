@@ -11,6 +11,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
 
@@ -228,8 +229,10 @@ public class ProcessoView extends JFrame {
 		});
 		panelListarProcessos.add(btnListarProcessos, gbc);
 
-		tableModelProcessos = new DefaultTableModel(new Object[][] {},
-				new String[] { "Número", "Cliente", "Parte Contrária", "Tribunal" });
+		tableModelProcessos = new DefaultTableModel(
+			    new Object[][] {}, 
+			    new String[] { "Número", "Cliente", "Parte Contrária", "Tribunal", "Fase", "Data de Abertura" }
+			);
 		tableProcessos = new JTable(tableModelProcessos);
 		JScrollPane scrollPaneProcessos = new JScrollPane(tableProcessos);
 		gbc.gridx = 0;
@@ -590,32 +593,38 @@ public class ProcessoView extends JFrame {
 	}
 
 	private void actionListarProcessos() {
-		String cadastroCliente = (String) cbbClientesListar.getSelectedItem();
-		if (cadastroCliente == null || cadastroCliente.isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Por favor, selecione um cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
-			return;
-		}
+	    String cadastroCliente = (String) cbbClientesListar.getSelectedItem();
+	    if (cadastroCliente == null || cadastroCliente.isEmpty()) {
+	        JOptionPane.showMessageDialog(this, "Por favor, selecione um cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
+	        return;
+	    }
 
-		List<Processo> listaProcessos = null;
-		try {
-			listaProcessos = processoController.getProcessosCliente(cadastroCliente);
-		} catch (ProcessoException e) {
-			e.printStackTrace();
-		}
+	    List<Processo> listaProcessos = null;
+	    try {
+	        listaProcessos = processoController.getProcessosCliente(cadastroCliente);
+	    } catch (ProcessoException e) {
+	        e.printStackTrace();
+	    }
 
-		tableModelProcessos.setRowCount(0);
+	    tableModelProcessos.setRowCount(0);
 
-		if (listaProcessos.isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Nenhum processo encontrado para o cliente selecionado.", "Informação",
-					JOptionPane.INFORMATION_MESSAGE);
-		} else {
-			for (Processo processo : listaProcessos) {
-				tableModelProcessos
-						.addRow(new Object[] { processo.getNumero(), processo.getCliente().getPessoa().getNome(),
-								processo.getParteContraria().getNome(), processo.getTribunal().getSigla() });
-			}
-		}
+	    if (listaProcessos.isEmpty()) {
+	        JOptionPane.showMessageDialog(this, "Nenhum processo encontrado para o cliente selecionado.", "Informação",
+	                JOptionPane.INFORMATION_MESSAGE);
+	    } else {
+	        for (Processo processo : listaProcessos) {
+	            tableModelProcessos.addRow(new Object[] {
+	                processo.getNumero(),
+	                processo.getCliente().getPessoa().getNome(),
+	                processo.getParteContraria().getNome(),
+	                processo.getTribunal().getSigla(),
+	                processo.getFase().name(),  // Adiciona a fase do processo
+	                new SimpleDateFormat("dd/MM/yyyy").format(processo.getDataAbertura())  // Adiciona a data formatada
+	            });
+	        }
+	    }
 	}
+
 
 	private void actionListarAudiencias() {
 		Long numeroProcesso = (Long) cbbProcessosListar.getSelectedItem();
