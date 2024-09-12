@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import exception.AudienciaException;
@@ -37,6 +38,10 @@ public class Audiencia implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Audiência [recomendação=" + recomendacao + ", advogado=" + advogado.getNome() + "]";
+	    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	    return "\nDetalhes da Audiência:\n" +
+	           "Data da Audiência: " + sdf.format(data) + "\n" +
+	           "Recomendação: " + recomendacao + "\n" +
+	           "Advogado Responsável: " + advogado.getNome() + " (Registro: " + advogado.getRegistro() + ")\n";
 	}
 }

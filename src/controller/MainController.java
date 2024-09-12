@@ -4,11 +4,6 @@ import java.io.Serializable;
 
 import persistence.Serializer;
 
-/* 
- * Design Pattern Singleton 
- * 
- */
-
 public class MainController implements Serializable {
 
 	private static final long serialVersionUID = 6341528978400871936L;
@@ -20,8 +15,6 @@ public class MainController implements Serializable {
 	private PessoaController pessoaController;
 
 	private ProcessoController processoController;
-
-	// declarar os demais controladores
 
 	private MainController() {
 		tribunalController = new TribunalController();

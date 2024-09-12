@@ -14,7 +14,7 @@ public class Serializer {
 	private static String fileName = "data.bin";
 
 	public static MainController readFile() {
-		//Se Não conseguir ler o arquivo, vai instanciar todas as classes do zero
+
 		MainController mainController = null;
 
 		try {
@@ -28,7 +28,7 @@ public class Serializer {
 
 		} catch (IOException e) {
 			System.err.println(String.format("Erro na leitura do arquivo %s!", fileName));
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -48,7 +48,7 @@ public class Serializer {
 
 		} catch (IOException e) {
 			System.err.println(String.format("Erro na gravação do arquivo %s!", fileName));
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
